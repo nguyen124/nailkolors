@@ -100,7 +100,7 @@ import { Service, Technician, NailColor } from '../../models';
                   <div class="tech-avatar" [style.background-image]="t.photo ? 'url(' + t.photo + ')' : ''">
                     <span *ngIf="!t.photo">{{t.name.charAt(0)}}</span>
                   </div>
-                  <div><h4>{{t.name}}</h4><p>{{t.specialties?.join(', ')}}</p></div>
+                  <div><h4>{{t.name}}</h4><p>{{t.specialties.join(', ')}}</p></div>
                   <mat-icon *ngIf="step3.get('technicianId')?.value === t._id">check_circle</mat-icon>
                 </div>
               </div>

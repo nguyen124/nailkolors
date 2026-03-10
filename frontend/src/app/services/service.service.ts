@@ -6,7 +6,8 @@ import { Service } from '../models';
 export class ServiceService {
   constructor(private http: HttpClient) {}
   getAll(category?: string) {
-    const params = category ? { category } : {};
+    const params: Record<string, string> = {};
+    if (category) params['category'] = category;
     return this.http.get<Service[]>('/api/services', { params });
   }
   create(data: FormData) { return this.http.post<Service>('/api/services', data); }

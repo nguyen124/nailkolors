@@ -47,7 +47,7 @@ import { AnalyticsDashboard } from '../../../models';
               <span class="rank">{{i+1}}</span>
               <span class="name">{{t.name}}</span>
               <span class="count">{{t.completed}} completed</span>
-              <mat-progress-bar mode="determinate" [value]="getPercent(t.completed, data.techPerformance[0]?.completed || 1)" color="primary"></mat-progress-bar>
+              <mat-progress-bar mode="determinate" [value]="getPercent(t.completed, data.techPerformance[0].completed || 1)" color="primary"></mat-progress-bar>
             </div>
             <p *ngIf="!data.techPerformance.length" class="empty-msg">No data yet</p>
           </mat-card-content>
