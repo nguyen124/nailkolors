@@ -19,8 +19,8 @@ import { AuthService } from '../../services/auth.service';
       <div class="login-card card">
         <div class="login-header">
           <div class="logo">💅 Nail Kolors</div>
-          <h2>Staff Login</h2>
-          <p>Sign in to access your dashboard</p>
+          <h2>Sign In</h2>
+          <p>Welcome back! Sign in to your account</p>
         </div>
         <form [formGroup]="form" (ngSubmit)="login()">
           <mat-form-field class="full-width">
@@ -41,6 +41,8 @@ import { AuthService } from '../../services/auth.service';
             <span *ngIf="!loading">Sign In</span>
           </button>
         </form>
+        <div class="divider"><span>Don't have an account?</span></div>
+        <a routerLink="/register" mat-stroked-button color="primary" class="full-width register-btn">Create Account</a>
         <p class="back-link"><a routerLink="/">← Back to website</a></p>
       </div>
     </div>
@@ -53,7 +55,9 @@ import { AuthService } from '../../services/auth.service';
     .login-header h2 { margin-bottom: 8px; }
     .login-header p { color: var(--text-muted); }
     .login-btn { height: 48px; font-size: 1rem; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .back-link { text-align: center; margin-top: 24px; }
+    .divider { text-align: center; margin: 24px 0 12px; color: var(--text-muted); font-size: 0.9rem; }
+    .register-btn { height: 44px; }
+    .back-link { text-align: center; margin-top: 16px; }
     .back-link a { color: var(--primary); text-decoration: none; }
   `]
 })
@@ -63,13 +67,19 @@ export class LoginComponent {
   showPass = false;
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snackBar: MatSnackBar) {
     this.form = this.fb.group({ email: ['', [Validators.required, Validators.email]], password: ['', [Validators.required, Validators.minLength(6)]] });
-    if (auth.isLoggedIn()) { const role = auth.currentUser()?.role; router.navigate([role === 'admin' ? '/admin' : '/technician']); }
+    if (auth.isLoggedIn()) { this.redirectByRole(auth.currentUser()?.role); }
   }
+  redirectByRole(role?: string) {
+    if (role === 'admin') this.router.navigate(['/admin']);
+    else if (role === 'technician') this.router.navigate(['/technician']);
+    else this.router.navigate(['/customer']);
+  }
+
   login() {
     if (this.form.invalid) return;
     this.loading = true;
     this.auth.login(this.form.value.email, this.form.value.password).subscribe({
-      next: res => this.router.navigate([res.user.role === 'admin' ? '/admin' : '/technician']),
+      next: res => this.redirectByRole(res.user.role),
       error: err => { this.snackBar.open(err.error?.message || 'Login failed', 'OK', { duration: 3000 }); this.loading = false; }
     });
   }

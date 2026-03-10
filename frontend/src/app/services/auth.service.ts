@@ -14,6 +14,16 @@ export class AuthService {
     if (stored) this._user.set(JSON.parse(stored));
   }
 
+  register(data: { name: string; email: string; password: string; phone?: string; role: 'customer' | 'technician' }) {
+    return this.http.post<{ token: string; user: User }>('/api/auth/register', data).pipe(
+      tap(res => {
+        localStorage.setItem('token', res.token);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        this._user.set(res.user);
+      })
+    );
+  }
+
   login(email: string, password: string) {
     return this.http.post<{ token: string; user: User }>('/api/auth/login', { email, password }).pipe(
       tap(res => {

@@ -2,7 +2,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'technician';
+  phone?: string;
+  role: 'admin' | 'technician' | 'customer';
 }
 
 export interface WorkingHours {

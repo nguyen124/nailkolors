@@ -5,6 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-public-layout',
@@ -26,6 +27,15 @@ import { CommonModule } from '@angular/common';
           <a routerLink="/contact" routerLinkActive="active">Contact</a>
         </nav>
         <div class="header-actions">
+          <ng-container *ngIf="auth.isLoggedIn(); else guestActions">
+            <a [routerLink]="dashboardLink" mat-stroked-button color="primary" class="dash-btn">
+              <mat-icon>dashboard</mat-icon> Dashboard
+            </a>
+          </ng-container>
+          <ng-template #guestActions>
+            <a routerLink="/login" mat-stroked-button color="primary">Sign In</a>
+            <a routerLink="/register" class="btn-primary register-btn">Register</a>
+          </ng-template>
           <a routerLink="/book" class="btn-primary book-btn">Book Now</a>
           <button mat-icon-button class="menu-btn" [matMenuTriggerFor]="mobileMenu">
             <mat-icon>menu</mat-icon>
@@ -90,6 +100,8 @@ import { CommonModule } from '@angular/common';
     .desktop-nav a:hover::after, .desktop-nav a.active::after { width: 100%; }
     .header-actions { display: flex; align-items: center; gap: 16px; }
     .book-btn { font-size: 0.9rem; padding: 8px 24px; }
+    .register-btn { font-size: 0.9rem; padding: 8px 20px; }
+    .dash-btn { font-size: 0.9rem; }
     .menu-btn { display: none !important; }
     @media (max-width: 900px) { .desktop-nav { display: none; } .menu-btn { display: inline-flex !important; } }
     .site-footer { background: linear-gradient(135deg, #2c2c2c, #1a1a1a); color: #ccc; padding: 64px 0 0; }
@@ -109,7 +121,15 @@ import { CommonModule } from '@angular/common';
 })
 export class PublicLayoutComponent {
   scrolled = false;
-  constructor() {
+
+  get dashboardLink() {
+    const role = this.auth.currentUser()?.role;
+    if (role === 'admin') return '/admin';
+    if (role === 'technician') return '/technician';
+    return '/customer';
+  }
+
+  constructor(public auth: AuthService) {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', () => { this.scrolled = window.scrollY > 50; });
     }

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guard';
 import { technicianGuard } from './guards/technician.guard';
+import { customerGuard } from './guards/customer.guard';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,16 @@ export const routes: Routes = [
     ]
   },
   { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) },
+  { path: 'register', loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent) },
+  {
+    path: 'customer',
+    loadComponent: () => import('./layout/customer-layout/customer-layout.component').then(m => m.CustomerLayoutComponent),
+    canActivate: [customerGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' as const },
+      { path: 'dashboard', loadComponent: () => import('./pages/customer/dashboard/dashboard.component').then(m => m.CustomerDashboardComponent) },
+    ]
+  },
   {
     path: 'admin',
     loadComponent: () => import('./layout/admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
