@@ -1,0 +1,64 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$primary: mat.define-palette(mat.$pink-palette, 600, 300, 900);
+$accent: mat.define-palette(mat.$amber-palette, 400);
+$warn: mat.define-palette(mat.$red-palette);
+
+$theme: mat.define-light-theme((
+  color: (primary: $primary, accent: $accent, warn: $warn),
+  typography: mat.define-typography-config($font-family: 'Lato, sans-serif'),
+  density: 0
+));
+
+@include mat.all-component-themes($theme);
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #d81b60;
+  --primary-light: #f8bbd0;
+  --primary-dark: #880e4f;
+  --accent: #ffd54f;
+  --text-dark: #2c2c2c;
+  --text-muted: #757575;
+  --bg-light: #fdf6f9;
+  --bg-white: #ffffff;
+  --shadow: 0 4px 20px rgba(216,27,96,0.1);
+  --radius: 12px;
+}
+
+html, body { height: 100%; }
+body { font-family: 'Lato', sans-serif; background-color: var(--bg-light); color: var(--text-dark); }
+h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 80px 0; }
+.section-title { font-size: 2.5rem; color: var(--primary-dark); text-align: center; margin-bottom: 16px; }
+.section-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 48px; font-size: 1.1rem; }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white !important; border: none; padding: 12px 32px;
+  border-radius: 50px; font-size: 1rem; cursor: pointer; text-decoration: none;
+  display: inline-block; font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+  &:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(216,27,96,0.35); }
+}
+
+.card {
+  background: var(--bg-white); border-radius: var(--radius); box-shadow: var(--shadow);
+  overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
+  &:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(216,27,96,0.15); }
+}
+
+.badge { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-primary { background: var(--primary-light); color: var(--primary-dark); }
+.badge-success { background: #e8f5e9; color: #2e7d32; }
+.badge-warning { background: #fff8e1; color: #f57f17; }
+.badge-danger { background: #fce4ec; color: #c62828; }
+
+.full-width { width: 100%; }
+
+@media (max-width: 768px) { .section { padding: 48px 0; } .section-title { font-size: 1.8rem; } .container { padding: 0 16px; } }
