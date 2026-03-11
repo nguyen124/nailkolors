@@ -23,6 +23,9 @@ Authentication
 
 * JWT authentication
 * Role-based access control
+* User self-registration (customer or technician roles only)
+* Admin account is pre-seeded via /api/auth/seed-admin — no self-registration as admin
+* Default admin credentials: email=admin@nailkolors.com / password=admin1234
 
 Real-time features
 
@@ -34,9 +37,14 @@ SYSTEM ROLES
 
 The application must support 3 roles:
 
-1. Admin (Salon Owner)
-2. Technician
-3. Customer
+1. Admin (Salon Owner) — pre-seeded only, cannot self-register
+2. Technician — can register with license number and license expiry date
+3. Customer — can register with name, email, phone, password
+
+Role-based routing after login:
+* admin → /admin
+* technician → /technician
+* customer → /customer
 
 ---
 
@@ -87,17 +95,13 @@ Customers should be able to book appointments online without creating an account
 
 Booking workflow:
 
-1. Select service
-2. Select nail color (optional)
-3. Select technician (or auto assign)
-4. Choose date
-5. Choose available time slot
-6. Enter customer information:
-
+Select the service that they want
+After select the service that they want, the customer can see the list of technicians that can do that service and their availability. The customer then can choose date, choose available time slot. Then the customer enter information:
    * name
    * phone
    * email
-7. Confirm appointment
+   * the detailed description that they want to do
+Then the customer confirm appointment
 
 Rules:
 
@@ -123,6 +127,16 @@ Customers should also be able to:
 TECHNICIAN DASHBOARD
 
 Technicians must log in.
+
+Registration: When registering as a technician, the user must provide:
+* name
+* email
+* phone
+* password
+* license number
+* license expiry date
+
+A Technician profile is auto-created on registration (linked to the User account via userId).
 
 Features:
 
@@ -153,7 +167,7 @@ Notifications
 
 ADMIN DASHBOARD (SALON OWNER)
 
-Admin must have a full management panel.
+Admin must have a full management panel. The default login credential of admin is admin@nailkolors.com / admin1234 (seeded via POST /api/auth/seed-admin)
 
 ---
 
@@ -164,6 +178,12 @@ Admin can:
 * Add service
 * Edit service
 * Delete service
+* Add technician by the license number of the technician and assign skills set to that technician
+* Edit technician skills set
+* Delete technician
+* View/Update/Delete appointment of the technician
+
+
 
 Fields:
 
@@ -264,16 +284,20 @@ Users
 * _id
 * name
 * email
-* password
-* role (admin, technician)
+* phone (optional)
+* password (hashed with bcrypt)
+* role (admin | technician | customer, default: customer)
 
 Technicians
 
 * _id
-* userId
+* userId (ref: Users)
+* name
 * bio
 * specialties
 * workingHours
+* licenseNumber
+* licenseExpiry
 
 Services
 
@@ -324,6 +348,8 @@ API ROUTES (Express)
 Auth
 
 POST /api/auth/login
+POST /api/auth/register       — register as customer or technician (admin blocked)
+POST /api/auth/seed-admin     — one-time admin seed (creates admin@nailkolors.com)
 
 Services
 
@@ -376,20 +402,35 @@ When a booking is created:
 
 ANGULAR STRUCTURE
 
-Create Angular modules:
+Standalone components with lazy-loaded routes (no NgModules).
 
-* public module
-* booking module
-* admin module
-* technician module
-* shared components module
+Layouts:
+* public-layout — sticky header with auth-aware nav (Sign In / Register for guests; Dashboard + account menu with Sign Out for logged-in users)
+* admin-layout — sidebar with nav and Logout button
+* technician-layout — sidebar with nav and Logout button
+* customer-layout — top header with account menu and Sign Out
+
+Route groups:
+* / (public-layout) — Home, Services, Gallery, Technicians, Blog, Contact, Book, My Appointments
+* /login — login page
+* /register — registration page (customer or technician)
+* /admin (admin-layout, adminGuard)
+* /technician (technician-layout, technicianGuard)
+* /customer (customer-layout, customerGuard)
+
+Services:
+* AuthService — login, register, logout, currentUser signal, isLoggedIn, token getter
+* AppointmentService, ServiceService, TechnicianService, ColorService, PostService, AnalyticsService, SocketService
+
+Guards:
+* authGuard, adminGuard, technicianGuard, customerGuard
 
 Include:
 
-* Angular services for API communication
-* Angular guards for authentication
 * Angular Material UI components
 * Calendar booking interface
+* RxJS for reactive data streams
+* Signals for auth state
 
 ---
 
@@ -403,6 +444,30 @@ Design style should look like a modern luxury nail salon:
 * mobile responsive
 
 ---
+
+IMPLEMENTED FEATURES (as of 2026-03-10)
+
+Backend:
+* Express + Socket.io server
+* JWT auth middleware (auth, adminOnly, technicianOrAdmin)
+* All CRUD routes for services, technicians, colors, appointments, posts
+* Analytics route
+* Multer image upload for services, colors, technicians, posts
+* Nodemailer confirmation emails on booking
+* Double-booking prevention (time slot overlap detection)
+* Admin seed route
+
+Frontend:
+* Angular 17 standalone components, lazy-loaded routes
+* Angular Material pink/rose luxury theme
+* Public pages: Home, Services, Gallery, Technicians, Blog, Contact, Book, My Appointments
+* Login page with role-based redirect
+* Register page (customer or technician; admin blocked)
+* Customer layout + dashboard (upcoming/completed appointments, cancel)
+* Admin layout + dashboard (analytics, appointments, services, colors, technicians, posts)
+* Technician layout + dashboard (schedule, availability, notifications)
+* Logout available in all layouts (header menu / sidebar footer)
+* Socket.io real-time notifications (admin + technician)
 
 OUTPUT FORMAT
 

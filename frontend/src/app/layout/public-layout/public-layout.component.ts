@@ -4,13 +4,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-public-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, CommonModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatDividerModule, CommonModule],
   template: `
     <header class="site-header" [class.scrolled]="scrolled">
       <div class="header-inner container">
@@ -31,6 +32,22 @@ import { AuthService } from '../../services/auth.service';
             <a [routerLink]="dashboardLink" mat-stroked-button color="primary" class="dash-btn">
               <mat-icon>dashboard</mat-icon> Dashboard
             </a>
+            <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-btn" title="Account">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #userMenu="matMenu">
+              <div class="user-menu-header" mat-menu-item disabled>
+                <mat-icon>person</mat-icon>
+                <span>{{auth.currentUser()?.name}}</span>
+              </div>
+              <mat-divider></mat-divider>
+              <a mat-menu-item [routerLink]="dashboardLink">
+                <mat-icon>dashboard</mat-icon> Dashboard
+              </a>
+              <button mat-menu-item (click)="auth.logout()">
+                <mat-icon>logout</mat-icon> Sign Out
+              </button>
+            </mat-menu>
           </ng-container>
           <ng-template #guestActions>
             <a routerLink="/login" mat-stroked-button color="primary">Sign In</a>
@@ -52,6 +69,11 @@ import { AuthService } from '../../services/auth.service';
       <a mat-menu-item routerLink="/contact">Contact</a>
       <a mat-menu-item routerLink="/book">Book Appointment</a>
       <a mat-menu-item routerLink="/my-appointments">My Appointments</a>
+      <ng-container *ngIf="auth.isLoggedIn()">
+        <mat-divider></mat-divider>
+        <a mat-menu-item [routerLink]="dashboardLink"><mat-icon>dashboard</mat-icon> My Dashboard</a>
+        <button mat-menu-item (click)="auth.logout()"><mat-icon>logout</mat-icon> Sign Out</button>
+      </ng-container>
     </mat-menu>
     <main><router-outlet></router-outlet></main>
     <footer class="site-footer">
