@@ -14,7 +14,11 @@ const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
   try {
-    const technicians = await Technician.find({ isActive: true }).populate('userId', 'name email');
+    const filter = { isActive: true };
+    // Filter by specialty: ?specialty=gel  (matches service category)
+    const specialty = req.query.specialty || req.query.serviceCategory;
+    if (specialty) filter.specialties = specialty;
+    const technicians = await Technician.find(filter).populate('userId', 'name email');
     res.json(technicians);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });

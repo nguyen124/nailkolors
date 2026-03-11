@@ -178,19 +178,13 @@ Admin can:
 * Add service
 * Edit service
 * Delete service
-* Add technician by the license number of the technician and assign skills set to that technician
-* Edit technician skills set
-* Delete technician
-* View/Update/Delete appointment of the technician
-
-
 
 Fields:
 
 * name
 * price
 * duration
-* category
+* category (manicure | pedicure | gel | acrylic | nail-art | other)
 * description
 * image
 
@@ -230,10 +224,15 @@ Admin can:
 Fields:
 
 * name
-* photo
-* bio
-* specialties
+* email / photo / bio
+* specialties — checkboxes using the same fixed category list as services:
+  (manicure, pedicure, gel, acrylic, nail-art, eyebrow waxing)
 * working hours
+
+Specialty ↔ Service mapping rule:
+  technician.specialties includes service.category
+  → that technician appears in the booking flow when customer picks that service
+  Backend: GET /api/technicians?specialty=gel returns only gel-specialist technicians
 
 ---
 

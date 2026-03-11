@@ -19,7 +19,9 @@ router.get('/available-slots', async (req, res) => {
     const technician = await Technician.findById(technicianId);
     if (!service || !technician) return res.status(404).json({ message: 'Not found' });
 
-    const requestedDate = new Date(date);
+    // Parse YYYY-MM-DD as local date (avoid UTC midnight offset shifting the day)
+    const [y, mo, d] = date.split('-').map(Number);
+    const requestedDate = new Date(y, mo - 1, d);
     const dayName = requestedDate.toLocaleDateString('en-US', { weekday: 'long' });
 
     const daySchedule = technician.workingHours.find(wh => wh.day === dayName);
@@ -91,17 +93,23 @@ router.get('/lookup', async (req, res) => {
 // Create appointment (public)
 router.post('/', async (req, res) => {
   try {
-    const { serviceId, technicianId, nailColorId, customerName, customerPhone, customerEmail, date, time, notes } = req.body;
-
-    // Check for double booking
-    const apptDate = new Date(date);
-    const start = new Date(date);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(date);
-    end.setHours(23, 59, 59, 999);
+    let { serviceId, technicianId, nailColorId, customerName, customerPhone, customerEmail, date, time, notes } = req.body;
 
     const service = await Service.findById(serviceId);
     if (!service) return res.status(404).json({ message: 'Service not found' });
+
+    // Auto-assign: pick a random available technician for this service's category
+    if (!technicianId || technicianId === 'auto') {
+      const candidates = await Technician.find({ isActive: true, specialties: service.category });
+      const pool = candidates.length > 0 ? candidates : await Technician.find({ isActive: true });
+      if (!pool.length) return res.status(400).json({ message: 'No technicians available at this time' });
+      technicianId = pool[Math.floor(Math.random() * pool.length)]._id;
+    }
+
+    // Check for double booking (parse YYYY-MM-DD as local date)
+    const [dy, dm, dd] = typeof date === 'string' ? date.split('-').map(Number) : [new Date(date).getFullYear(), new Date(date).getMonth()+1, new Date(date).getDate()];
+    const start = new Date(dy, dm - 1, dd, 0, 0, 0, 0);
+    const end = new Date(dy, dm - 1, dd, 23, 59, 59, 999);
 
     const [reqH, reqM] = time.split(':').map(Number);
     const reqStart = reqH * 60 + reqM;
@@ -129,7 +137,7 @@ router.post('/', async (req, res) => {
     await appointment.save();
 
     const technician = await Technician.findById(technicianId);
-    await sendConfirmationEmail(appointment, service, technician);
+    try { await sendConfirmationEmail(appointment, service, technician); } catch (_) { /* email is non-critical */ }
 
     // Emit socket events
     const io = req.app.get('io');
