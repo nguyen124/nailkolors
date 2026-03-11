@@ -65,7 +65,7 @@ import { Subscription } from 'rxjs';
     .logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--primary-light); margin-bottom: 8px; }
     .user-info { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
     .admin-sidenav mat-nav-list a { color: rgba(255,255,255,0.7); border-radius: 8px; margin: 2px 8px; transition: all 0.2s; }
-    .admin-sidenav mat-nav-list a:hover, .admin-sidenav mat-nav-list a.active { background: rgba(233,30,140,0.2); color: white; }
+    .admin-sidenav mat-nav-list a:hover, .admin-sidenav mat-nav-list a.active { background: rgba(60,144,66,0.2); color: white; }
     .admin-sidenav mat-icon { color: var(--primary-light); }
     .badge-count { background: var(--primary); color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; display: flex; align-items: center; justify-content: center; margin-left: auto; }
     .sidenav-footer { margin-top: auto; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.1); }

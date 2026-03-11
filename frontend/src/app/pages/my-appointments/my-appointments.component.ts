@@ -78,7 +78,7 @@ import { Appointment } from '../../models';
     .status-badge.pending { background: #fff8e1; color: #f57f17; }
     .status-badge.confirmed { background: #e8f5e9; color: #2e7d32; }
     .status-badge.completed { background: #e3f2fd; color: #1565c0; }
-    .status-badge.cancelled { background: #fce4ec; color: #c62828; }
+    .status-badge.cancelled { background: #e8f5e9; color: #c62828; }
     .appt-date { color: var(--text-muted); font-size: 0.9rem; }
     .appt-body { display: flex; gap: 32px; flex-wrap: wrap; }
     .appt-service, .appt-tech { display: flex; align-items: center; gap: 12px; }

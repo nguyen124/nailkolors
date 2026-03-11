@@ -270,7 +270,7 @@ import { Service, Technician, NailColor } from '../../models';
     </section>
   `,
   styles: [`
-    .booking-hero { background: linear-gradient(135deg, var(--primary), #880e4f); color: white; padding: 80px 0; text-align: center; }
+    .booking-hero { background: linear-gradient(135deg, var(--primary), #2d6e32); color: white; padding: 80px 0; text-align: center; }
     .booking-hero h1 { font-size: 3rem; margin-bottom: 16px; }
     .booking-container { max-width: 860px; }
     .booking-stepper { border-radius: var(--radius); box-shadow: var(--shadow); }
@@ -288,22 +288,22 @@ import { Service, Technician, NailColor } from '../../models';
     .chip.active, .chip:hover { background: var(--primary); color: white; border-color: var(--primary); }
     .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 24px; }
     .service-option { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px; border: 2px solid #eee; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
-    .service-option.selected { border-color: var(--primary); background: #fff0f5; }
-    .service-option:hover { border-color: var(--primary-light); box-shadow: 0 4px 12px rgba(216,27,96,0.1); }
+    .service-option.selected { border-color: var(--primary); background: #f1f8f1; }
+    .service-option:hover { border-color: var(--primary-light); box-shadow: 0 4px 12px rgba(60,144,66,0.1); }
     .service-info h4 { margin-bottom: 4px; }
     .service-info p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 8px; }
     .service-meta { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
     .service-meta .price { color: var(--primary); font-weight: 700; font-size: 1rem; }
     .service-meta .duration { display: flex; align-items: center; gap: 3px; font-size: 0.82rem; color: var(--text-muted); }
     .service-meta .duration mat-icon { font-size: 14px; height: 14px; width: 14px; }
-    .category-tag { font-size: 0.75rem; background: #fce4ec; color: var(--primary); padding: 2px 8px; border-radius: 50px; text-transform: capitalize; }
+    .category-tag { font-size: 0.75rem; background: #e8f5e9; color: var(--primary); padding: 2px 8px; border-radius: 50px; text-transform: capitalize; }
     .check { color: var(--primary); margin-left: 8px; flex-shrink: 0; }
 
     /* Technician step */
     .tech-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
     .tech-card { display: flex; align-items: center; gap: 16px; padding: 16px; border: 2px solid #eee; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
-    .tech-card.selected { border-color: var(--primary); background: #fff0f5; }
-    .tech-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 12px rgba(216,27,96,0.08); }
+    .tech-card.selected { border-color: var(--primary); background: #f1f8f1; }
+    .tech-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 12px rgba(60,144,66,0.08); }
     .tech-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-light), var(--primary)); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 700; color: white; background-size: cover; background-position: center; flex-shrink: 0; }
     .tech-avatar.auto { font-size: 1.6rem; background: linear-gradient(135deg, #ffd54f, #ff8f00); }
     .tech-info { flex: 1; min-width: 0; }
@@ -331,7 +331,7 @@ import { Service, Technician, NailColor } from '../../models';
     .color-section { margin-top: 16px; }
     .colors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; max-height: 260px; overflow-y: auto; padding: 4px; }
     .color-option { display: flex; align-items: center; gap: 10px; padding: 10px; border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-    .color-option.selected { border-color: var(--primary); background: #fff0f5; }
+    .color-option.selected { border-color: var(--primary); background: #f1f8f1; }
     .color-swatch { width: 34px; height: 34px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); flex-shrink: 0; }
     .color-swatch-sm { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
     .color-name { display: block; font-weight: 600; font-size: 0.82rem; }

@@ -43,7 +43,7 @@ import { AuthService } from '../../services/auth.service';
     </footer>
   `,
   styles: [`
-    .site-header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(216,27,96,0.08); }
+    .site-header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(60,144,66,0.08); }
     .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 1.3rem; }
     .logo-text { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary); }

@@ -131,7 +131,7 @@ const SERVICE_CATEGORIES = ['manicure', 'pedicure', 'gel', 'acrylic', 'nail-art'
     .preview { max-height: 80px; border-radius: 50%; width: 80px; object-fit: cover; }
     .tech-avatar { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-light), var(--primary)); background-size: cover; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; }
     table { width: 100%; }
-    .badge-primary { background: #fce4ec; color: var(--primary); font-size: 0.78rem; padding: 2px 8px; border-radius: 50px; margin-right: 4px; text-transform: capitalize; }
+    .badge-primary { background: #e8f5e9; color: var(--primary); font-size: 0.78rem; padding: 2px 8px; border-radius: 50px; margin-right: 4px; text-transform: capitalize; }
     .no-spec { color: #ccc; }
   `]
 })

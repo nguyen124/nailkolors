@@ -106,7 +106,7 @@ import { Appointment, Service, Technician } from '../../../models';
     .status-badge.pending { background: #fff8e1; color: #f57f17; }
     .status-badge.confirmed { background: #e8f5e9; color: #2e7d32; }
     .status-badge.completed { background: #e3f2fd; color: #1565c0; }
-    .status-badge.cancelled { background: #fce4ec; color: #c62828; }
+    .status-badge.cancelled { background: #e8f5e9; color: #c62828; }
     .cancel-btn { font-size: 0.8rem; height: 32px; }
     .empty { text-align: center; padding: 48px 24px; color: var(--text-muted); }
     .empty mat-icon { font-size: 56px; height: 56px; width: 56px; opacity: 0.2; display: block; margin: 0 auto 16px; }

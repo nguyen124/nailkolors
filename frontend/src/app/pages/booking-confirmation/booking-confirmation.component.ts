@@ -34,7 +34,7 @@ import { CommonModule } from '@angular/common';
     </section>
   `,
   styles: [`
-    .confirmation-page { min-height: 80vh; display: flex; align-items: center; background: linear-gradient(135deg, #fdf6f9, #fce4ec); }
+    .confirmation-page { min-height: 80vh; display: flex; align-items: center; background: linear-gradient(135deg, #f1f8f1, #e8f5e9); }
     .confirmation-card { max-width: 600px; margin: 0 auto; padding: 48px; text-align: center; }
     .success-icon { font-size: 4rem; margin-bottom: 16px; }
     h1 { font-size: 2.5rem; color: var(--primary-dark); margin-bottom: 16px; }

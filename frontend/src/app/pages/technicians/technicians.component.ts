@@ -36,7 +36,7 @@ import { Technician } from '../../models';
     </section>
   `,
   styles: [`
-    .page-hero { background: linear-gradient(135deg, #4a148c, #880e4f); color: white; padding: 80px 0; text-align: center; }
+    .page-hero { background: linear-gradient(135deg, #4a148c, #2d6e32); color: white; padding: 80px 0; text-align: center; }
     .page-hero h1 { font-size: 3rem; margin-bottom: 16px; }
     .techs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
     .tech-photo { height: 250px; background: linear-gradient(135deg, var(--primary-light), var(--primary)); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }

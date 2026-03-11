@@ -61,14 +61,14 @@ import { Appointment } from '../../../models';
     .time-line { flex: 1; width: 2px; background: var(--primary-light); margin: 4px 0; }
     .appt-card-inner { flex: 1; padding: 12px 16px; border-radius: 10px; border-left: 3px solid var(--primary); background: var(--bg-light); }
     .appt-card-inner.completed { border-color: #4caf50; background: #f1f8e9; }
-    .appt-card-inner.cancelled { border-color: #f44336; background: #fce4ec; opacity: 0.7; }
+    .appt-card-inner.cancelled { border-color: #f44336; background: #e8f5e9; opacity: 0.7; }
     .appt-header-inner { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     .appt-header-inner h4 { font-size: 1rem; }
     .status-chip { font-size: 0.7rem; padding: 2px 8px; border-radius: 50px; font-weight: 700; }
     .status-chip.pending { background: #fff8e1; color: #f57f17; }
     .status-chip.confirmed { background: #e8f5e9; color: #2e7d32; }
     .status-chip.completed { background: #e3f2fd; color: #1565c0; }
-    .status-chip.cancelled { background: #fce4ec; color: #c62828; }
+    .status-chip.cancelled { background: #e8f5e9; color: #c62828; }
     .phone { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
     .empty { text-align: center; padding: 48px; color: var(--text-muted); }
     .empty mat-icon { font-size: 48px; height: 48px; width: 48px; opacity: 0.3; display: block; margin: 0 auto 16px; }

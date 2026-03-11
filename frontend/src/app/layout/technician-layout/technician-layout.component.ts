@@ -52,7 +52,7 @@ import { Subscription } from 'rxjs';
     .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--primary-light); margin-bottom: 8px; }
     .user-info { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
     .tech-sidenav mat-nav-list a { color: rgba(255,255,255,0.7); border-radius: 8px; margin: 2px 8px; }
-    .tech-sidenav mat-nav-list a:hover, .tech-sidenav mat-nav-list a.active { background: rgba(233,30,140,0.2); color: white; }
+    .tech-sidenav mat-nav-list a:hover, .tech-sidenav mat-nav-list a.active { background: rgba(60,144,66,0.2); color: white; }
     .tech-sidenav mat-icon { color: var(--primary-light); }
     .sidenav-footer { margin-top: auto; padding: 16px 0; border-top: 1px solid rgba(255,255,255,0.1); }
     .sidenav-footer a, .sidenav-footer button { color: rgba(255,255,255,0.6); width: 100%; }

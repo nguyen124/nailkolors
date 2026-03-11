@@ -40,7 +40,7 @@ import { NailColor } from '../../models';
     </section>
   `,
   styles: [`
-    .page-hero { background: linear-gradient(135deg, #880e4f, var(--primary)); color: white; padding: 80px 0; text-align: center; }
+    .page-hero { background: linear-gradient(135deg, #2d6e32, var(--primary)); color: white; padding: 80px 0; text-align: center; }
     .page-hero h1 { font-size: 3rem; margin-bottom: 16px; }
     .filter-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
     .filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }

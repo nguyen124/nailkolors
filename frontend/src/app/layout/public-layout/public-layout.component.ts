@@ -109,8 +109,8 @@ import { AuthService } from '../../services/auth.service';
     </footer>
   `,
   styles: [`
-    .site-header { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(233,30,140,0.08); transition: all 0.3s; }
-    .site-header.scrolled { box-shadow: 0 4px 30px rgba(233,30,140,0.15); }
+    .site-header { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(60,144,66,0.08); transition: all 0.3s; }
+    .site-header.scrolled { box-shadow: 0 4px 30px rgba(60,144,66,0.15); }
     .header-inner { display: flex; align-items: center; justify-content: space-between; height: 70px; }
     .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
     .logo-icon { font-size: 1.8rem; }

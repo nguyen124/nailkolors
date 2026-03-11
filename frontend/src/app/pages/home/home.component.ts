@@ -100,7 +100,7 @@ import { Service, Post } from '../../models';
     </section>
   `,
   styles: [`
-    .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 90vh; align-items: center; background: linear-gradient(135deg, #fdf6f9 0%, #fce4ec 100%); padding: 0 48px; gap: 48px; }
+    .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 90vh; align-items: center; background: linear-gradient(135deg, #f1f8f1 0%, #e8f5e9 100%); padding: 0 48px; gap: 48px; }
     .hero-subtitle { color: var(--primary); font-size: 1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
     .hero-title { font-size: 4rem; color: var(--text-dark); line-height: 1.1; margin: 8px 0 24px; }
     .hero-desc { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; max-width: 480px; margin-bottom: 32px; }
@@ -112,7 +112,7 @@ import { Service, Post } from '../../models';
     .stat-num { font-size: 2rem; font-weight: 700; color: var(--primary); font-family: 'Playfair Display', serif; }
     .stat-label { font-size: 0.85rem; color: var(--text-muted); }
     .hero-image { display: flex; justify-content: center; }
-    .hero-img-bg { width: 380px; height: 420px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 30px 80px rgba(216,27,96,0.3); }
+    .hero-img-bg { width: 380px; height: 420px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 30px 80px rgba(60,144,66,0.3); }
     .floating-card { position: absolute; background: white; border-radius: 12px; padding: 12px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); font-weight: 600; color: var(--primary-dark); }
     .card-1 { top: 20%; left: -20%; animation: float 3s ease-in-out infinite; }
     .card-2 { bottom: 20%; right: -15%; animation: float 3s ease-in-out infinite 1.5s; }

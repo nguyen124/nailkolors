@@ -68,7 +68,7 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
     .time-field { width: 100px; }
     .day-off { color: var(--text-muted); font-size: 0.85rem; }
     .blocked-list { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-    .blocked-chip { display: flex; align-items: center; justify-content: space-between; background: #fce4ec; border-radius: 8px; padding: 4px 12px; }
+    .blocked-chip { display: flex; align-items: center; justify-content: space-between; background: #e8f5e9; border-radius: 8px; padding: 4px 12px; }
     @media (max-width: 900px) { .avail-grid { grid-template-columns: 1fr; } }
   `]
 })

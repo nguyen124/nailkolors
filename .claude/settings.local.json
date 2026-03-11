@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node seed.js)"
+      "Bash(node seed.js)",
+      "Bash(xargs sed:*)"
     ]
   }
 }

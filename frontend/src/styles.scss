@@ -2,7 +2,7 @@
 
 @include mat.core();
 
-$primary: mat.define-palette(mat.$pink-palette, 600, 300, 900);
+$primary: mat.define-palette(mat.$green-palette, 700, 300, 900);
 $accent: mat.define-palette(mat.$amber-palette, 400);
 $warn: mat.define-palette(mat.$red-palette);
 
@@ -17,15 +17,15 @@ $theme: mat.define-light-theme((
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --primary: #d81b60;
-  --primary-light: #f8bbd0;
-  --primary-dark: #880e4f;
+  --primary: #3c9042;
+  --primary-light: #a5d6a7;
+  --primary-dark: #2d6e32;
   --accent: #ffd54f;
   --text-dark: #2c2c2c;
   --text-muted: #757575;
-  --bg-light: #fdf6f9;
+  --bg-light: #f1f8f1;
   --bg-white: #ffffff;
-  --shadow: 0 4px 20px rgba(216,27,96,0.1);
+  --shadow: 0 4px 20px rgba(60,144,66,0.1);
   --radius: 12px;
 }
 
@@ -44,20 +44,20 @@ h1, h2, h3 { font-family: 'Playfair Display', serif; }
   border-radius: 50px; font-size: 1rem; cursor: pointer; text-decoration: none;
   display: inline-block; font-weight: 600;
   transition: transform 0.2s, box-shadow 0.2s;
-  &:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(216,27,96,0.35); }
+  &:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(60,144,66,0.35); }
 }
 
 .card {
   background: var(--bg-white); border-radius: var(--radius); box-shadow: var(--shadow);
   overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;
-  &:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(216,27,96,0.15); }
+  &:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(60,144,66,0.15); }
 }
 
 .badge { display: inline-block; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 .badge-primary { background: var(--primary-light); color: var(--primary-dark); }
 .badge-success { background: #e8f5e9; color: #2e7d32; }
 .badge-warning { background: #fff8e1; color: #f57f17; }
-.badge-danger { background: #fce4ec; color: #c62828; }
+.badge-danger { background: #ffebee; color: #c62828; }
 
 .full-width { width: 100%; }
 
