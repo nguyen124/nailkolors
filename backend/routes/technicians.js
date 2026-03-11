@@ -39,6 +39,16 @@ router.get('/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
+const DEFAULT_WORKING_HOURS = [
+  { day: 'Monday',    isWorking: true,  start: '09:00', end: '18:00' },
+  { day: 'Tuesday',   isWorking: true,  start: '09:00', end: '18:00' },
+  { day: 'Wednesday', isWorking: true,  start: '09:00', end: '18:00' },
+  { day: 'Thursday',  isWorking: true,  start: '09:00', end: '18:00' },
+  { day: 'Friday',    isWorking: true,  start: '09:00', end: '18:00' },
+  { day: 'Saturday',  isWorking: false, start: '09:00', end: '18:00' },
+  { day: 'Sunday',    isWorking: false, start: '09:00', end: '18:00' },
+];
+
 router.post('/', auth, adminOnly, upload.single('photo'), async (req, res) => {
   try {
     const { name, email, password, bio, specialties, workingHours } = req.body;
@@ -47,9 +57,12 @@ router.post('/', auth, adminOnly, upload.single('photo'), async (req, res) => {
       user = new User({ name, email, password: password || 'tech123', role: 'technician' });
       await user.save();
     }
-    const data = { userId: user._id, name, bio, specialties: specialties ? JSON.parse(specialties) : [] };
+    const data = {
+      userId: user._id, name, bio,
+      specialties: specialties ? JSON.parse(specialties) : [],
+      workingHours: workingHours ? JSON.parse(workingHours) : DEFAULT_WORKING_HOURS,
+    };
     if (req.file) data.photo = `/uploads/technicians/${req.file.filename}`;
-    if (workingHours) data.workingHours = JSON.parse(workingHours);
     const tech = new Technician(data);
     await tech.save();
     res.status(201).json(tech);

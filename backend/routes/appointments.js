@@ -24,8 +24,10 @@ router.get('/available-slots', async (req, res) => {
     const requestedDate = new Date(y, mo - 1, d);
     const dayName = requestedDate.toLocaleDateString('en-US', { weekday: 'long' });
 
-    const daySchedule = technician.workingHours.find(wh => wh.day === dayName);
-    if (!daySchedule || !daySchedule.isWorking) {
+    // Fall back to default 9-18 if technician has no working hours configured
+    const daySchedule = technician.workingHours.find(wh => wh.day === dayName)
+      || { isWorking: true, start: '09:00', end: '18:00' };
+    if (!daySchedule.isWorking) {
       return res.json({ slots: [] });
     }
 
