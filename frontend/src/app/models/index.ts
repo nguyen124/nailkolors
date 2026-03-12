@@ -30,7 +30,7 @@ export interface Service {
   name: string;
   price: number;
   duration: number;
-  category: 'manicure' | 'pedicure' | 'gel' | 'acrylic' | 'nail-art' | 'other';
+  category: 'Manicure' | 'Pedicure' | 'Acrylic' | 'Builder Gel' | 'Sns Dipping' | 'Color Change' | 'Removal' | 'Waxing';
   description: string;
   image: string;
   isActive: boolean;
@@ -41,7 +41,7 @@ export interface NailColor {
   colorName: string;
   brand: string;
   colorCode: string;
-  finishType: 'glossy' | 'matte' | 'glitter' | 'shimmer' | 'cream' | 'gel';
+  finishType: 'Shiny' | 'Matte' | 'Glitter' | 'Cat Eyes' | 'Holographic';
   image: string;
   quantity: number;
   status: 'available' | 'out-of-stock';

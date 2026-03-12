@@ -29,7 +29,8 @@ import { Service, Post } from '../../models';
         </div>
       </div>
       <div class="hero-image">
-        <div class="hero-img-bg">
+        <div class="hero-img-wrap">
+          <img src="assets/hero.png" alt="Serenity Nails & Spa" class="hero-img">
           <div class="floating-card card-1">✨ Premium Quality</div>
           <div class="floating-card card-2">💅 Expert Care</div>
         </div>
@@ -111,11 +112,12 @@ import { Service, Post } from '../../models';
     .stat { display: flex; flex-direction: column; }
     .stat-num { font-size: 2rem; font-weight: 700; color: var(--primary); font-family: 'Playfair Display', serif; }
     .stat-label { font-size: 0.85rem; color: var(--text-muted); }
-    .hero-image { display: flex; justify-content: center; }
-    .hero-img-bg { width: 380px; height: 420px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 30px 80px rgba(60,144,66,0.3); }
-    .floating-card { position: absolute; background: white; border-radius: 12px; padding: 12px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); font-weight: 600; color: var(--primary-dark); }
-    .card-1 { top: 20%; left: -20%; animation: float 3s ease-in-out infinite; }
-    .card-2 { bottom: 20%; right: -15%; animation: float 3s ease-in-out infinite 1.5s; }
+    .hero-image { display: flex; justify-content: center; align-items: center; }
+    .hero-img-wrap { position: relative; width: 420px; height: 480px; flex-shrink: 0; }
+    .hero-img { width: 100%; height: 100%; object-fit: cover; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; box-shadow: 0 30px 80px rgba(60,144,66,0.3); display: block; }
+    .floating-card { position: absolute; background: white; border-radius: 12px; padding: 12px 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); font-weight: 600; color: var(--primary-dark); white-space: nowrap; }
+    .card-1 { top: 20%; left: -15%; animation: float 3s ease-in-out infinite; }
+    .card-2 { bottom: 20%; right: -10%; animation: float 3s ease-in-out infinite 1.5s; }
     @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
     .features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
     .feature-item { text-align: center; padding: 32px 24px; background: white; border-radius: var(--radius); box-shadow: var(--shadow); }

@@ -90,7 +90,7 @@ import { Service } from '../../../models';
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 16px 0; }
     .span-2 { grid-column: 1 / -1; }
     .file-upload { display: flex; flex-direction: column; gap: 8px; }
-    .preview { max-height: 100px; border-radius: 8px; }
+    .preview { max-height: 100px; max-width: 100%; width: auto; border-radius: 8px; object-fit: contain; }
     table { width: 100%; }
     @media (max-width: 768px) { .page-header { flex-direction: column; align-items: flex-start; gap: 12px; } mat-card { overflow-x: auto; } .form-grid { grid-template-columns: 1fr; } }
   `]
@@ -102,17 +102,17 @@ export class AdminServicesComponent implements OnInit {
   editId = '';
   imageFile: File | null = null;
   imagePreview = '';
-  categories = ['manicure', 'pedicure', 'gel', 'acrylic', 'nail-art', 'other'];
+  categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
   columns = ['name', 'category', 'price', 'duration', 'actions'];
 
   constructor(private serviceService: ServiceService, private fb: FormBuilder, private snackBar: MatSnackBar) {
-    this.form = this.fb.group({ name: ['', Validators.required], price: [0, Validators.required], duration: [60, Validators.required], category: ['manicure', Validators.required], description: [''] });
+    this.form = this.fb.group({ name: ['', Validators.required], price: [0, Validators.required], duration: [60, Validators.required], category: ['Manicure', Validators.required], description: [''] });
   }
 
   ngOnInit() { this.load(); }
   load() { this.serviceService.getAll().subscribe(s => this.services = s); }
 
-  openForm() { this.showForm = true; this.editId = ''; this.form.reset({ category: 'manicure', price: 0, duration: 60 }); this.imagePreview = ''; }
+  openForm() { this.showForm = true; this.editId = ''; this.form.reset({ category: 'Manicure', price: 0, duration: 60 }); this.imagePreview = ''; }
   edit(s: Service) { this.showForm = true; this.editId = s._id; this.form.patchValue(s); this.imagePreview = s.image || ''; }
   cancelForm() { this.showForm = false; }
 

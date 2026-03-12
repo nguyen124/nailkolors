@@ -70,7 +70,7 @@ Customers must be able to view:
 * Price
 * Duration
 * Description
-* Category (manicure, pedicure, gel, acrylic, etc.)
+* Category (Manicure, Pedicure, Acrylic, Builder Gel, Sns Dipping, Color Change, Removal, Waxing.)
 
 ---
 
@@ -184,7 +184,7 @@ Fields:
 * name
 * price
 * duration
-* category (manicure | pedicure | gel | acrylic | nail-art | other)
+* category (Manicure | Pedicure | Builder Gel | Acrylic | Sns Dipping | Color Change | Removal | Waxing)
 * description
 * image
 

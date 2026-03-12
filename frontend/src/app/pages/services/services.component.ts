@@ -27,7 +27,7 @@ import { Service } from '../../models';
               <p>{{s.description}}</p>
               <div class="service-meta">
                 <span class="price">\${{s.price}}</span>
-                <span class="duration"><mat-icon>schedule</mat-icon> {{s.duration}} min</span>
+                <span class="duration"><mat-icon>schedule</mat-icon> About {{s.duration}} min</span>
               </div>
               <a routerLink="/book" [queryParams]="{service: s._id}" class="btn-primary book-btn">Book This</a>
             </div>
@@ -60,7 +60,7 @@ import { Service } from '../../models';
 export class ServicesComponent implements OnInit {
   services: Service[] = [];
   filteredServices: Service[] = [];
-  categories = ['manicure', 'pedicure', 'gel', 'acrylic', 'nail-art', 'other'];
+  categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
   activeCategory = '';
   constructor(private serviceService: ServiceService) {}
   ngOnInit() { this.serviceService.getAll().subscribe(s => { this.services = s; this.filteredServices = s; }); }

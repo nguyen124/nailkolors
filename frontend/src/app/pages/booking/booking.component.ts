@@ -395,7 +395,7 @@ export class BookingComponent implements OnInit {
   availableColors: NailColor[] = [];
   selectedService: Service | null = null;
 
-  categories = ['manicure', 'pedicure', 'gel', 'acrylic', 'nail-art', 'other'];
+  categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
   activeCategory = '';
   minDate = new Date();
 

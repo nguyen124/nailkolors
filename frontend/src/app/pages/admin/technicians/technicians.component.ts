@@ -14,7 +14,7 @@ import { TechnicianService } from '../../../services/technician.service';
 import { Technician } from '../../../models';
 
 // These must match service categories exactly so the booking filter works
-const SERVICE_CATEGORIES = ['manicure', 'pedicure', 'gel', 'acrylic', 'nail-art', 'other'];
+const SERVICE_CATEGORIES = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
 
 @Component({
   selector: 'app-admin-technicians',
