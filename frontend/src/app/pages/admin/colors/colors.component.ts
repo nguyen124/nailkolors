@@ -111,16 +111,16 @@ export class AdminColorsComponent implements OnInit {
   editId = '';
   imageFile: File | null = null;
   imagePreview = '';
-  finishes = ['glossy', 'matte', 'glitter', 'shimmer', 'cream', 'gel'];
+  finishes = ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'];
   columns = ['color', 'brand', 'finish', 'quantity', 'status', 'actions'];
 
   constructor(private colorService: ColorService, private fb: FormBuilder, private snackBar: MatSnackBar) {
-    this.form = this.fb.group({ colorName: ['', Validators.required], brand: ['', Validators.required], colorCode: ['#ff69b4', Validators.required], finishType: ['glossy', Validators.required], quantity: [0] });
+    this.form = this.fb.group({ colorName: ['', Validators.required], brand: ['', Validators.required], colorCode: ['#ff69b4', Validators.required], finishType: ['Shiny', Validators.required], quantity: [0] });
   }
 
   ngOnInit() { this.load(); }
   load() { this.colorService.getAll().subscribe(c => this.colors = c); }
-  openForm() { this.showForm = true; this.editId = ''; this.form.reset({ finishType: 'glossy', colorCode: '#ff69b4', quantity: 0 }); this.imagePreview = ''; }
+  openForm() { this.showForm = true; this.editId = ''; this.form.reset({ finishType: 'Shiny', colorCode: '#ff69b4', quantity: 0 }); this.imagePreview = ''; }
   edit(c: NailColor) { this.showForm = true; this.editId = c._id; this.form.patchValue(c); this.imagePreview = c.image || ''; }
   cancelForm() { this.showForm = false; }
   onFile(e: any) { this.imageFile = e.target.files[0]; if (this.imageFile) { const r = new FileReader(); r.onload = ev => this.imagePreview = ev.target?.result as string; r.readAsDataURL(this.imageFile); } }

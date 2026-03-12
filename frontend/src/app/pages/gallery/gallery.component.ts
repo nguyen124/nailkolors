@@ -64,7 +64,7 @@ import { NailColor } from '../../models';
 export class GalleryComponent implements OnInit {
   colors: NailColor[] = [];
   filteredColors: NailColor[] = [];
-  finishes = ['glossy', 'matte', 'glitter', 'shimmer', 'cream', 'gel'];
+  finishes = ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'];
   activeFilter = '';
   showAvailable = false;
   constructor(private colorService: ColorService) {}

@@ -84,7 +84,7 @@ Each color should include:
 * brand
 * color code
 * photo
-* finish type (glossy, matte, glitter, etc.)
+* finish type ('Shiny' | 'Matte' | 'Glitter' | 'Cat Eyes' | 'Holographic'.)
 * stock status
 
 ---

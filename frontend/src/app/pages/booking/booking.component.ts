@@ -56,10 +56,13 @@ import { Service, Technician, NailColor } from '../../models';
             <div class="services-grid">
               <div class="service-card" *ngFor="let s of filteredServices"
                 [class.selected]="selectedService?._id === s._id"
+                [class.hovered]="hoveredServiceId === s._id"
+                (mouseenter)="hoveredServiceId = s._id"
+                (mouseleave)="hoveredServiceId = null"
                 (click)="selectService(s)">
                 <div class="service-info">
                   <h4>{{s.name}}</h4>
-                  <p>{{s.description | slice:0:90}}</p>
+                  <p>{{hoveredServiceId === s._id ? s.description : (s.description | slice:0:90) + (s.description && s.description.length > 90 ? '…' : '')}}</p>
                   <div class="service-meta">
                     <span class="price">\${{s.price}}</span>
                     <span class="dur"><mat-icon>schedule</mat-icon>{{s.duration}} min</span>
@@ -298,11 +301,12 @@ import { Service, Technician, NailColor } from '../../models';
     .chip { padding: 6px 16px; border: 2px solid var(--primary-light); border-radius: 50px; background: white; color: var(--primary); cursor: pointer; font-weight: 600; text-transform: capitalize; transition: all 0.2s; }
     .chip.active, .chip:hover { background: var(--primary); color: white; border-color: var(--primary); }
     .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; }
-    .service-card { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+    .service-card { display: flex; justify-content: space-between; align-items: flex-start; padding: 16px; border: 2px solid #e0e0e0; border-radius: 12px; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s; }
     .service-card.selected { border-color: var(--primary); background: var(--bg-light); }
-    .service-card:hover { border-color: var(--primary-light); box-shadow: 0 4px 12px rgba(60,144,66,0.1); }
+    .service-card:hover, .service-card.hovered { border-color: var(--primary-light); box-shadow: 0 4px 16px rgba(60,144,66,0.15); z-index: 1; }
+    .service-info { flex: 1; min-width: 0; }
     .service-info h4 { margin: 0 0 4px; font-size: 1rem; }
-    .service-info p { font-size: 0.82rem; color: var(--text-muted); margin: 0 0 8px; }
+    .service-info p { font-size: 0.82rem; color: var(--text-muted); margin: 0 0 8px; line-height: 1.5; }
     .service-meta { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .price { color: var(--primary); font-weight: 700; font-size: 1rem; }
     .dur { display: flex; align-items: center; gap: 3px; font-size: 0.8rem; color: var(--text-muted); }
@@ -394,6 +398,7 @@ export class BookingComponent implements OnInit {
   technicians: Technician[] = [];
   availableColors: NailColor[] = [];
   selectedService: Service | null = null;
+  hoveredServiceId: string | null = null;
 
   categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
   activeCategory = '';
