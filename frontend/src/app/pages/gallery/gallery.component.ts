@@ -57,6 +57,8 @@ import { NailColor } from '../../models';
     .color-info p { font-size: 0.8rem; color: var(--text-muted); }
     .finish-tag { font-size: 0.7rem; background: var(--primary-light); color: var(--primary-dark); padding: 2px 8px; border-radius: 50px; text-transform: capitalize; }
     .empty { text-align: center; color: var(--text-muted); margin-top: 48px; }
+    @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .colors-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .filter-bar { flex-direction: column; align-items: flex-start; } }
+    @media (max-width: 480px) { .page-hero h1 { font-size: 1.6rem; } .colors-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
   `]
 })
 export class GalleryComponent implements OnInit {

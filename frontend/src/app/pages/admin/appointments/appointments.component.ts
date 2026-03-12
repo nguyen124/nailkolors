@@ -105,6 +105,7 @@ import { Appointment, Technician, Service } from '../../../models';
     .status-select { font-size: 0.85rem; }
     table { width: 100%; }
     .empty-msg { text-align: center; color: var(--text-muted); padding: 32px; }
+    @media (max-width: 768px) { .page-header { flex-direction: column; align-items: flex-start; gap: 12px; } mat-card { overflow-x: auto; } }
   `]
 })
 export class AdminAppointmentsComponent implements OnInit {

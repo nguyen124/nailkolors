@@ -101,6 +101,7 @@ import { NailColor } from '../../../models';
     .preview { max-height: 80px; border-radius: 8px; }
     .swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); }
     table { width: 100%; }
+    @media (max-width: 768px) { .page-header { flex-direction: column; align-items: flex-start; gap: 12px; } mat-card { overflow-x: auto; } .form-grid { grid-template-columns: 1fr; } }
   `]
 })
 export class AdminColorsComponent implements OnInit {

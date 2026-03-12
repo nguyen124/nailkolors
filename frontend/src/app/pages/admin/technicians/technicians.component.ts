@@ -133,6 +133,7 @@ const SERVICE_CATEGORIES = ['manicure', 'pedicure', 'gel', 'acrylic', 'nail-art'
     table { width: 100%; }
     .badge-primary { background: #e8f5e9; color: var(--primary); font-size: 0.78rem; padding: 2px 8px; border-radius: 50px; margin-right: 4px; text-transform: capitalize; }
     .no-spec { color: #ccc; }
+    @media (max-width: 768px) { .page-header { flex-direction: column; align-items: flex-start; gap: 12px; } mat-card { overflow-x: auto; } .form-grid { grid-template-columns: 1fr; } }
   `]
 })
 export class AdminTechniciansComponent implements OnInit {

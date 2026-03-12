@@ -92,6 +92,7 @@ import { Service } from '../../../models';
     .file-upload { display: flex; flex-direction: column; gap: 8px; }
     .preview { max-height: 100px; border-radius: 8px; }
     table { width: 100%; }
+    @media (max-width: 768px) { .page-header { flex-direction: column; align-items: flex-start; gap: 12px; } mat-card { overflow-x: auto; } .form-grid { grid-template-columns: 1fr; } }
   `]
 })
 export class AdminServicesComponent implements OnInit {

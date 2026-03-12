@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
   imports: [RouterOutlet, RouterLink, RouterLinkActive, MatSidenavModule, MatListModule, MatIconModule, MatToolbarModule, MatButtonModule, MatSnackBarModule, CommonModule],
   template: `
     <mat-sidenav-container class="tech-container">
-      <mat-sidenav mode="side" opened class="tech-sidenav">
+      <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" class="tech-sidenav">
         <div class="sidenav-header">
           <img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img">
           <div class="user-info"><mat-icon>face</mat-icon><span>{{auth.currentUser()?.name}}</span></div>
@@ -40,7 +40,10 @@ import { Subscription } from 'rxjs';
         </div>
       </mat-sidenav>
       <mat-sidenav-content class="tech-content">
-        <mat-toolbar class="tech-toolbar"><span>Technician Dashboard</span></mat-toolbar>
+        <mat-toolbar class="tech-toolbar">
+          <button mat-icon-button *ngIf="isMobile" (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+          <span>Technician Dashboard</span>
+        </mat-toolbar>
         <div class="tech-main"><router-outlet></router-outlet></div>
       </mat-sidenav-content>
     </mat-sidenav-container>
@@ -59,12 +62,17 @@ import { Subscription } from 'rxjs';
     .tech-toolbar { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
     .tech-content { background: #f5f5f5; }
     .tech-main { padding: 24px; }
+    @media (max-width: 768px) { .tech-main { padding: 16px; } }
   `]
 })
 export class TechnicianLayoutComponent implements OnInit, OnDestroy {
+  isMobile = false;
   private sub!: Subscription;
 
-  constructor(public auth: AuthService, private techService: TechnicianService, private socket: SocketService, private snackBar: MatSnackBar) {}
+  constructor(public auth: AuthService, private techService: TechnicianService, private socket: SocketService, private snackBar: MatSnackBar) {
+    this.isMobile = window.innerWidth <= 768;
+    window.addEventListener('resize', () => { this.isMobile = window.innerWidth <= 768; });
+  }
 
   ngOnInit() {
     this.socket.connect();

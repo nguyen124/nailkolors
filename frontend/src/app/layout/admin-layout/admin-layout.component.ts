@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
   imports: [RouterOutlet, RouterLink, RouterLinkActive, MatSidenavModule, MatListModule, MatIconModule, MatToolbarModule, MatButtonModule, MatSnackBarModule, CommonModule],
   template: `
     <mat-sidenav-container class="admin-container">
-      <mat-sidenav mode="side" opened class="admin-sidenav">
+      <mat-sidenav #sidenav [mode]="isMobile ? 'over' : 'side'" [opened]="!isMobile" class="admin-sidenav">
         <div class="sidenav-header">
           <img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img">
           <div class="user-info"><mat-icon>admin_panel_settings</mat-icon><span>Admin Panel</span></div>
@@ -50,6 +50,9 @@ import { Subscription } from 'rxjs';
       </mat-sidenav>
       <mat-sidenav-content class="admin-content">
         <mat-toolbar class="admin-toolbar">
+          <button mat-icon-button *ngIf="isMobile" (click)="sidenav.toggle()" class="menu-toggle">
+            <mat-icon>menu</mat-icon>
+          </button>
           <span class="toolbar-title">Admin Dashboard</span>
           <span class="spacer"></span>
           <span class="user-name">{{auth.currentUser()?.name}}</span>
@@ -76,13 +79,18 @@ import { Subscription } from 'rxjs';
     .user-name { color: var(--text-muted); font-size: 0.9rem; }
     .admin-content { background: #f5f5f5; }
     .admin-main { padding: 24px; }
+    @media (max-width: 768px) { .admin-main { padding: 16px; } .user-name { display: none; } }
   `]
 })
 export class AdminLayoutComponent implements OnInit, OnDestroy {
   newApptCount = 0;
+  isMobile = false;
   private sub!: Subscription;
 
-  constructor(public auth: AuthService, private socket: SocketService, private snackBar: MatSnackBar) {}
+  constructor(public auth: AuthService, private socket: SocketService, private snackBar: MatSnackBar) {
+    this.isMobile = window.innerWidth <= 768;
+    window.addEventListener('resize', () => { this.isMobile = window.innerWidth <= 768; });
+  }
 
   ngOnInit() {
     this.socket.connect();

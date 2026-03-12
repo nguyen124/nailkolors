@@ -53,7 +53,8 @@ import { Service } from '../../models';
     .duration mat-icon { font-size: 16px; height: 16px; width: 16px; }
     .book-btn { display: block; text-align: center; text-decoration: none; }
     @media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .services-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .services-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .page-hero h1 { font-size: 1.6rem; } }
   `]
 })
 export class ServicesComponent implements OnInit {

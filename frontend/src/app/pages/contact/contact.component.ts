@@ -44,7 +44,8 @@ import { CommonModule } from '@angular/common';
     .info-item h4 { margin-bottom: 4px; }
     .info-item p { color: var(--text-muted); line-height: 1.6; }
     .contact-form { padding: 32px; }
-    @media (max-width: 768px) { .contact-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .contact-grid { grid-template-columns: 1fr; gap: 24px; } .contact-info h2, .contact-form h2 { font-size: 1.4rem; } }
+    @media (max-width: 480px) { .page-hero h1 { font-size: 1.6rem; } .contact-form { padding: 20px; } }
   `]
 })
 export class ContactComponent {

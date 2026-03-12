@@ -360,7 +360,15 @@ import { Service, Technician, NailColor } from '../../models';
       .services-grid { grid-template-columns: 1fr; }
       .date-field { width: 100%; }
       .colors-grid { grid-template-columns: repeat(2, 1fr); }
+      .booking-hero { padding: 48px 0; }
       .booking-hero h1 { font-size: 2rem; }
+      .booking-container { padding: 0 8px; }
+      .tech-card { flex-wrap: wrap; }
+    }
+    @media (max-width: 480px) {
+      .booking-hero h1 { font-size: 1.6rem; }
+      .step-nav { flex-wrap: wrap; }
+      .step-nav button { width: 100%; }
     }
   `]
 })

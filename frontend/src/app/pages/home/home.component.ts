@@ -141,8 +141,9 @@ import { Service, Post } from '../../models';
     .blog-card { border-radius: var(--radius) !important; }
     .post-date { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 8px; }
     .blog-card h3 { margin-bottom: 8px; font-size: 1.1rem; }
-    @media (max-width: 1024px) { .hero { grid-template-columns: 1fr; text-align: center; padding: 48px 24px; } .hero-image { display: none; } .features-grid { grid-template-columns: repeat(2, 1fr); } .services-grid { grid-template-columns: repeat(2, 1fr); } .blog-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) { .hero-title { font-size: 2.5rem; } .features-grid { grid-template-columns: 1fr; } .services-grid { grid-template-columns: 1fr; } .blog-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1024px) { .hero { grid-template-columns: 1fr; text-align: center; padding: 48px 24px; } .hero-image { display: none; } .hero-desc { max-width: 100%; } .hero-btns { justify-content: center; } .hero-stats { justify-content: center; } .features-grid { grid-template-columns: repeat(2, 1fr); } .services-grid { grid-template-columns: repeat(2, 1fr); } .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .hero { padding: 40px 16px; min-height: auto; } .hero-title { font-size: 2.2rem; } .hero-btns { flex-direction: column; align-items: center; } .hero-stats { gap: 16px; flex-wrap: wrap; justify-content: center; } .features-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; } .services-grid { grid-template-columns: 1fr; } .blog-grid { grid-template-columns: 1fr; } .cta-section { padding: 48px 16px; } .cta-section h2 { font-size: 1.8rem; } .btn-large { padding: 14px 32px; font-size: 1rem; } }
+    @media (max-width: 400px) { .hero-title { font-size: 1.8rem; } .features-grid { grid-template-columns: 1fr; } .hero-stats { flex-direction: column; align-items: center; gap: 12px; } }
   `]
 })
 export class HomeComponent implements OnInit {

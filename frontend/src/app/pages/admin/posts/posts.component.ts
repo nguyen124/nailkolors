@@ -73,6 +73,7 @@ import { Post } from '../../../models';
     .file-upload { display: flex; flex-direction: column; gap: 8px; }
     .preview { max-height: 150px; border-radius: 8px; max-width: 300px; }
     table { width: 100%; }
+    @media (max-width: 768px) { .page-header { flex-direction: column; align-items: flex-start; gap: 12px; } mat-card { overflow-x: auto; } .form-grid { grid-template-columns: 1fr; } }
   `]
 })
 export class AdminPostsComponent implements OnInit {

@@ -52,7 +52,8 @@ import { Technician } from '../../models';
     .day-chip.off { background: #f5f5f5; color: #bbb; }
     .book-btn { display: block; text-align: center; text-decoration: none; }
     @media (max-width: 900px) { .techs-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .techs-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .techs-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { .page-hero h1 { font-size: 1.6rem; } }
   `]
 })
 export class TechniciansComponent implements OnInit {
