@@ -84,7 +84,7 @@ router.get('/lookup', async (req, res) => {
     const appointments = await Appointment.find(filter)
       .populate('serviceId', 'name price duration')
       .populate('technicianId', 'name photo')
-      .populate('nailColorId', 'colorName brand colorCode')
+      .populate('nailColorIds', 'colorName brand colorCode')
       .sort({ date: -1 });
     res.json(appointments);
   } catch (err) { res.status(500).json({ message: err.message }); }
@@ -93,7 +93,7 @@ router.get('/lookup', async (req, res) => {
 // Create appointment (public)
 router.post('/', async (req, res) => {
   try {
-    let { serviceId, technicianId, nailColorId, customerName, customerPhone, customerEmail, date, time, notes } = req.body;
+    let { serviceId, technicianId, nailColorIds, referenceUrl, customerName, customerPhone, customerEmail, date, time, notes } = req.body;
 
     const service = await Service.findById(serviceId);
     if (!service) return res.status(404).json({ message: 'Service not found' });
@@ -131,7 +131,9 @@ router.post('/', async (req, res) => {
     if (conflict) return res.status(409).json({ message: 'Time slot not available' });
 
     const appointment = new Appointment({
-      serviceId, technicianId, nailColorId: nailColorId || null,
+      serviceId, technicianId,
+      nailColorIds: Array.isArray(nailColorIds) ? nailColorIds : (nailColorIds ? [nailColorIds] : []),
+      referenceUrl: referenceUrl || '',
       customerName, customerPhone, customerEmail, date, time, notes
     });
     await appointment.save();
@@ -144,7 +146,7 @@ router.post('/', async (req, res) => {
     const populatedAppt = await Appointment.findById(appointment._id)
       .populate('serviceId', 'name price duration')
       .populate('technicianId', 'name')
-      .populate('nailColorId', 'colorName brand');
+      .populate('nailColorIds', 'colorName brand');
 
     io.to(`technician-${technicianId}`).emit('new-appointment', populatedAppt);
     io.to('admin-room').emit('new-appointment', populatedAppt);
@@ -180,7 +182,7 @@ router.get('/', auth, technicianOrAdmin, async (req, res) => {
     const appointments = await Appointment.find(filter)
       .populate('serviceId', 'name price duration')
       .populate('technicianId', 'name photo')
-      .populate('nailColorId', 'colorName brand colorCode')
+      .populate('nailColorIds', 'colorName brand colorCode')
       .sort({ date: 1, time: 1 });
     res.json(appointments);
   } catch (err) { res.status(500).json({ message: err.message }); }
@@ -191,7 +193,7 @@ router.put('/:id', auth, technicianOrAdmin, async (req, res) => {
     const appointment = await Appointment.findByIdAndUpdate(req.params.id, req.body, { new: true })
       .populate('serviceId', 'name price duration')
       .populate('technicianId', 'name')
-      .populate('nailColorId', 'colorName brand');
+      .populate('nailColorIds', 'colorName brand');
 
     const io = req.app.get('io');
     io.to('admin-room').emit('appointment-updated', appointment);

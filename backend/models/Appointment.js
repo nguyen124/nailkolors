@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const appointmentSchema = new mongoose.Schema({
   serviceId: { type: mongoose.Schema.Types.ObjectId, ref: 'Service', required: true },
   technicianId: { type: mongoose.Schema.Types.ObjectId, ref: 'Technician', required: true },
-  nailColorId: { type: mongoose.Schema.Types.ObjectId, ref: 'NailColor', default: null },
+  nailColorIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'NailColor' }],
+  referenceUrl: { type: String, default: '' },
   customerName: { type: String, required: true, trim: true },
   customerPhone: { type: String, required: true, trim: true },
   customerEmail: { type: String, required: true, lowercase: true },

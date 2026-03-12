@@ -199,21 +199,53 @@ import { Service, Technician, NailColor } from '../../models';
                 <textarea matInput formControlName="notes" rows="3"
                   placeholder="e.g. French tip, glitter design, specific colors, allergies…"></textarea>
               </mat-form-field>
+
+              <mat-form-field class="full-width">
+                <mat-label>Reference URL to the sample image <span style="font-weight:400;font-size:0.85em">(optional)</span></mat-label>
+                <mat-icon matPrefix>link</mat-icon>
+                <input matInput formControlName="referenceUrl" type="url"
+                  placeholder="https://www.pinterest.com/pin/576460821095578458... or any image URL">
+              </mat-form-field>
+              <div class="ref-preview" *ngIf="infoForm.get('referenceUrl')?.value">
+                <img [src]="infoForm.get('referenceUrl')?.value" alt="Reference" class="ref-img"
+                  (error)="refImgError = true" (load)="refImgError = false"
+                  *ngIf="!refImgError">
+                <div class="ref-link-only" *ngIf="refImgError">
+                  <mat-icon>broken_image</mat-icon>
+                  <a [href]="infoForm.get('referenceUrl')?.value" target="_blank" rel="noopener">View reference link</a>
+                </div>
+              </div>
             </form>
 
-            <!-- Optional nail color -->
+            <!-- Nail color picker: up to 10 -->
             <div class="color-section" *ngIf="availableColors.length > 0">
-              <h4 class="sub-title"><mat-icon>palette</mat-icon> Nail Color <span class="optional">(Optional)</span></h4>
+              <h4 class="sub-title">
+                <mat-icon>palette</mat-icon> Pick Colors
+                <span class="optional">(optional · up to 10)</span>
+                <span class="color-count-badge" *ngIf="selectedColorIds.length > 0">
+                  {{selectedColorIds.length}} / 10 selected
+                </span>
+              </h4>
               <div class="colors-grid">
                 <div class="color-card" *ngFor="let c of availableColors"
-                  [class.selected]="selectedColorId === c._id"
-                  (click)="selectedColorId = selectedColorId === c._id ? '' : c._id">
+                  [class.selected]="isColorSelected(c._id)"
+                  [class.color-limit]="!isColorSelected(c._id) && selectedColorIds.length >= 10"
+                  (click)="toggleColor(c._id)">
                   <div class="color-swatch" [style.background]="c.colorCode"></div>
-                  <div>
+                  <div class="color-text">
                     <span class="color-name">{{c.colorName}}</span>
                     <span class="color-brand">{{c.brand}}</span>
                   </div>
-                  <mat-icon class="sel-check" *ngIf="selectedColorId === c._id">check_circle</mat-icon>
+                  <mat-icon class="sel-check" *ngIf="isColorSelected(c._id)">check_circle</mat-icon>
+                </div>
+              </div>
+              <!-- Selected swatches strip -->
+              <div class="selected-swatches" *ngIf="selectedColorIds.length > 0">
+                <span class="swatch-strip-label">Selected:</span>
+                <div class="swatch-strip-item" *ngFor="let id of selectedColorIds" (click)="toggleColor(id)" title="Click to remove">
+                  <div class="color-swatch-sm" [style.background]="getColor(id)?.colorCode"></div>
+                  <span class="swatch-name">{{getColor(id)?.colorName}}</span>
+                  <mat-icon class="remove-icon">close</mat-icon>
                 </div>
               </div>
             </div>
@@ -249,11 +281,19 @@ import { Service, Technician, NailColor } from '../../models';
                 <div class="summary-row"><span>Date</span><strong>{{selectedDate | date:'fullDate'}}</strong></div>
                 <div class="summary-row"><span>Time</span><strong>{{selectedTime}}</strong></div>
               </div>
-              <div class="summary-section" *ngIf="selectedColorId">
-                <div class="summary-label">Nail Color</div>
+              <div class="summary-section" *ngIf="selectedColorIds.length > 0">
+                <div class="summary-label">Nail Colors ({{selectedColorIds.length}})</div>
+                <div class="summary-swatches">
+                  <div class="summary-swatch-item" *ngFor="let id of selectedColorIds">
+                    <div class="color-swatch-sm" [style.background]="getColor(id)?.colorCode"></div>
+                    <span>{{getColor(id)?.colorName}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="summary-section" *ngIf="infoForm.get('referenceUrl')?.value">
+                <div class="summary-label">Reference</div>
                 <div class="summary-row">
-                  <span>{{getColor(selectedColorId)?.colorName}} · {{getColor(selectedColorId)?.brand}}</span>
-                  <div class="color-swatch-sm" [style.background]="getColor(selectedColorId)?.colorCode"></div>
+                  <a [href]="infoForm.get('referenceUrl')?.value" target="_blank" rel="noopener" class="ref-url-link">View reference image</a>
                 </div>
               </div>
               <div class="summary-section">
@@ -339,14 +379,33 @@ import { Service, Technician, NailColor } from '../../models';
     /* Info step */
     .info-form { display: flex; flex-direction: column; gap: 2px; }
     .full-width { width: 100%; }
+
+    /* Reference URL preview */
+    .ref-preview { margin: -8px 0 12px; }
+    .ref-img { max-height: 180px; max-width: 100%; border-radius: 10px; object-fit: contain; border: 1px solid #e0e0e0; display: block; }
+    .ref-link-only { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--primary); }
+    .ref-link-only mat-icon { font-size: 18px; height: 18px; width: 18px; }
+
+    /* Color picker */
+    .color-count-badge { margin-left: auto; background: var(--primary); color: white; font-size: 0.75rem; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
     .color-section { margin-top: 8px; }
-    .colors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; max-height: 240px; overflow-y: auto; }
+    .colors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
     .color-card { display: flex; align-items: center; gap: 10px; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
     .color-card.selected { border-color: var(--primary); background: var(--bg-light); }
+    .color-card.color-limit { opacity: 0.45; cursor: not-allowed; }
+    .color-text { flex: 1; min-width: 0; }
     .color-swatch { width: 32px; height: 32px; border-radius: 50%; border: 2px solid rgba(0,0,0,0.1); flex-shrink: 0; }
     .color-swatch-sm { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
     .color-name { display: block; font-weight: 600; font-size: 0.8rem; }
     .color-brand { display: block; font-size: 0.7rem; color: var(--text-muted); }
+
+    /* Selected swatches strip */
+    .selected-swatches { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; padding: 10px 12px; background: var(--bg-light); border-radius: 10px; }
+    .swatch-strip-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+    .swatch-strip-item { display: flex; align-items: center; gap: 5px; background: white; border: 1px solid #e0e0e0; border-radius: 50px; padding: 3px 8px 3px 4px; cursor: pointer; transition: background 0.15s; }
+    .swatch-strip-item:hover { background: #fce4ec; }
+    .swatch-name { font-size: 0.75rem; font-weight: 600; }
+    .remove-icon { font-size: 14px; height: 14px; width: 14px; color: #e57373; }
 
     /* Summary */
     .summary-card { padding: 0; overflow: hidden; margin-bottom: 24px; }
@@ -356,6 +415,10 @@ import { Service, Technician, NailColor } from '../../models';
     .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: 0.93rem; }
     .summary-row span { color: var(--text-muted); }
     .summary-row strong { text-align: right; max-width: 58%; }
+    .summary-swatches { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0; }
+    .summary-swatch-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+    .ref-url-link { color: var(--primary); font-size: 0.9rem; text-decoration: none; }
+    .ref-url-link:hover { text-decoration: underline; }
 
     .sel-check { color: var(--primary); margin-left: auto; flex-shrink: 0; }
     .step-nav { display: flex; gap: 12px; align-items: center; margin-top: 28px; padding-top: 16px; border-top: 1px solid #f0f0f0; }
@@ -389,7 +452,8 @@ export class BookingComponent implements OnInit {
   infoForm: FormGroup;
 
   // Step 4 / shared
-  selectedColorId = '';
+  selectedColorIds: string[] = [];
+  refImgError = false;
   submitting = false;
 
   // Data
@@ -422,7 +486,8 @@ export class BookingComponent implements OnInit {
       customerName:  ['', Validators.required],
       customerPhone: ['', Validators.required],
       customerEmail: ['', [Validators.required, Validators.email]],
-      notes: ['']
+      notes: [''],
+      referenceUrl: ['']
     });
   }
 
@@ -494,12 +559,25 @@ export class BookingComponent implements OnInit {
     return this.availableColors.find(c => c._id === id);
   }
 
+  isColorSelected(id: string): boolean {
+    return this.selectedColorIds.includes(id);
+  }
+
+  toggleColor(id: string) {
+    const idx = this.selectedColorIds.indexOf(id);
+    if (idx > -1) {
+      this.selectedColorIds.splice(idx, 1);
+    } else if (this.selectedColorIds.length < 10) {
+      this.selectedColorIds.push(id);
+    }
+  }
+
   confirm() {
     this.submitting = true;
     const payload = {
       serviceId:     this.selectedService!._id,
       technicianId:  this.selectedTechId,
-      nailColorId:   this.selectedColorId || undefined,
+      nailColorIds:  this.selectedColorIds,
       date:          this.localDateStr(this.selectedDate!),
       time:          this.selectedTime,
       ...this.infoForm.value
