@@ -5,7 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
@@ -14,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSelectModule, MatSnackBarModule, MatProgressSpinnerModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatSnackBarModule, MatProgressSpinnerModule, CommonModule, RouterLink],
   template: `
     <div class="register-wrapper">
       <div class="register-card card">
@@ -56,24 +55,6 @@ import { AuthService } from '../../services/auth.service';
             <mat-error *ngIf="form.get('password')?.hasError('minlength')">Minimum 6 characters</mat-error>
           </mat-form-field>
 
-          <mat-form-field class="full-width">
-            <mat-label>Register as</mat-label>
-            <mat-select formControlName="role">
-              <mat-option value="customer">
-                <mat-icon>person</mat-icon> Client / Customer
-              </mat-option>
-              <mat-option value="technician">
-                <mat-icon>spa</mat-icon> Nail Technician
-              </mat-option>
-            </mat-select>
-            <mat-icon matPrefix>badge</mat-icon>
-          </mat-form-field>
-
-          <div class="role-note" *ngIf="form.get('role')?.value === 'technician'">
-            <mat-icon>info</mat-icon>
-            <p>Your technician profile will be created. The admin will review and activate your account.</p>
-          </div>
-
           <button mat-raised-button color="primary" class="full-width register-btn" type="submit" [disabled]="form.invalid || loading">
             <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
             <span *ngIf="!loading">Create Account</span>
@@ -113,8 +94,7 @@ export class RegisterComponent {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['customer', Validators.required]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
     if (auth.isLoggedIn()) this.redirectByRole(auth.currentUser()?.role);
   }

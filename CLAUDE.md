@@ -23,8 +23,9 @@ Authentication
 
 * JWT authentication
 * Role-based access control
-* User self-registration (customer or technician roles only)
+* User self-registration (customer role only)
 * Admin account is pre-seeded via /api/auth/seed-admin — no self-registration as admin
+* Technician accounts are created by admin only (admin panel → Technician Management)
 * Default admin credentials: email=admin@nailkolors.com / password=admin1234
 
 Real-time features

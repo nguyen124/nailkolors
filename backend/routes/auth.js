@@ -18,34 +18,18 @@ router.post('/register', [
   body('name').notEmpty().trim(),
   body('email').isEmail(),
   body('password').isLength({ min: 6 }),
-  body('role').optional().isIn(['customer', 'technician'])
+  body('role').optional().isIn(['customer'])
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-  const { name, email, password, phone, role = 'customer' } = req.body;
+  const { name, email, password, phone } = req.body;
   try {
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ message: 'Email already registered' });
 
-    // Prevent self-registering as admin
-    const safeRole = role === 'admin' ? 'customer' : role;
-
-    const user = new User({ name, email, password, phone: phone || '', role: safeRole });
+    const user = new User({ name, email, password, phone: phone || '', role: 'customer' });
     await user.save();
-
-    // If registering as technician, create a basic Technician profile
-    if (safeRole === 'technician') {
-      const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-      const workingHours = days.map(day => ({
-        day,
-        isWorking: !['Saturday','Sunday'].includes(day),
-        start: '09:00',
-        end: '18:00'
-      }));
-      const tech = new Technician({ userId: user._id, name, workingHours, specialties: [] });
-      await tech.save();
-    }
 
     const token = signToken(user);
     res.status(201).json({ token, user: { id: user._id, name: user.name, email: user.email, role: user.role } });

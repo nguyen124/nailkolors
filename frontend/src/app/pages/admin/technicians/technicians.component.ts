@@ -151,7 +151,7 @@ export class AdminTechniciansComponent implements OnInit {
     this.form = this.fb.group({
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: [''],
+      password: ['', Validators.required],
       bio: ['']
     });
   }
@@ -164,6 +164,8 @@ export class AdminTechniciansComponent implements OnInit {
     this.showForm = true;
     this.editId = '';
     this.form.reset();
+    this.form.get('password')!.setValidators(Validators.required);
+    this.form.get('password')!.updateValueAndValidity();
     this.selectedSpecialties = [];
     this.imagePreview = '';
   }
@@ -171,7 +173,9 @@ export class AdminTechniciansComponent implements OnInit {
   edit(t: Technician) {
     this.showForm = true;
     this.editId = t._id;
-    this.form.patchValue({ name: t.name, email: (t as any).userId?.email || '', bio: t.bio });
+    this.form.patchValue({ name: t.name, email: (t as any).userId?.email || '', bio: t.bio, password: '' });
+    this.form.get('password')!.clearValidators();
+    this.form.get('password')!.updateValueAndValidity();
     this.selectedSpecialties = [...(t.specialties || [])];
     this.imagePreview = t.photo || '';
   }
