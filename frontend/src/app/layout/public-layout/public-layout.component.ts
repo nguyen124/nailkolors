@@ -16,8 +16,7 @@ import { AuthService } from '../../services/auth.service';
     <header class="site-header" [class.scrolled]="scrolled">
       <div class="header-inner container">
         <a routerLink="/" class="logo">
-          <span class="logo-icon">💅</span>
-          <span class="logo-text">Serenity Nails & Spa</span>
+          <img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img">
         </a>
         <nav class="desktop-nav">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
@@ -80,7 +79,7 @@ import { AuthService } from '../../services/auth.service';
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <div class="logo"><span class="logo-icon">💅</span><span class="logo-text">Serenity Nails & Spa</span></div>
+            <div class="logo"><img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img"></div>
             <p>Luxury nail care in a relaxing, welcoming environment.</p>
           </div>
           <div class="footer-links">
@@ -97,8 +96,8 @@ import { AuthService } from '../../services/auth.service';
           </div>
           <div class="footer-contact">
             <h4>Contact</h4>
-            <p><mat-icon>location_on</mat-icon> 123 Beauty Ave, Suite 1</p>
-            <p><mat-icon>phone</mat-icon> (555) 123-4567</p>
+            <p><mat-icon>location_on</mat-icon> 646 West FM 78, Cibolo, TX 78108</p>
+            <p><mat-icon>phone</mat-icon> (210) 530-1285</p>
             <p><mat-icon>email</mat-icon> hello&#64;serenitynailsspa.com</p>
           </div>
         </div>
@@ -112,9 +111,8 @@ import { AuthService } from '../../services/auth.service';
     .site-header { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(60,144,66,0.08); transition: all 0.3s; }
     .site-header.scrolled { box-shadow: 0 4px 30px rgba(60,144,66,0.15); }
     .header-inner { display: flex; align-items: center; justify-content: space-between; height: 70px; }
-    .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; }
-    .logo-icon { font-size: 1.8rem; }
-    .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .logo-img { height: 52px; width: auto; object-fit: contain; }
     .desktop-nav { display: flex; gap: 32px; }
     .desktop-nav a { text-decoration: none; color: var(--text-dark); font-weight: 500; position: relative; padding-bottom: 4px; transition: color 0.2s; }
     .desktop-nav a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary); transition: width 0.3s; }
@@ -128,7 +126,7 @@ import { AuthService } from '../../services/auth.service';
     @media (max-width: 900px) { .desktop-nav { display: none; } .menu-btn { display: inline-flex !important; } }
     .site-footer { background: linear-gradient(135deg, #2c2c2c, #1a1a1a); color: #ccc; padding: 64px 0 0; }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 48px; }
-    .footer-brand .logo-text { color: var(--primary-light); }
+    .footer-brand .logo-img { height: 60px; filter: brightness(0) invert(1) opacity(0.85); }
     .footer-brand p { margin-top: 12px; line-height: 1.7; }
     .footer-links, .footer-contact { display: flex; flex-direction: column; gap: 8px; }
     .footer-links h4, .footer-contact h4 { color: white; margin-bottom: 8px; font-family: 'Playfair Display', serif; }

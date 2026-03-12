@@ -18,7 +18,7 @@ import { AuthService } from '../../services/auth.service';
     <div class="login-wrapper">
       <div class="login-card card">
         <div class="login-header">
-          <div class="logo">💅 Serenity Nails & Spa</div>
+          <img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img">
           <h2>Sign In</h2>
           <p>Welcome back! Sign in to your account</p>
         </div>
@@ -51,7 +51,7 @@ import { AuthService } from '../../services/auth.service';
     .login-wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, var(--primary-dark)); padding: 24px; }
     .login-card { width: 100%; max-width: 420px; padding: 40px; }
     .login-header { text-align: center; margin-bottom: 32px; }
-    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary); margin-bottom: 16px; }
+    .logo-img { height: 72px; width: auto; object-fit: contain; margin-bottom: 16px; }
     .login-header h2 { margin-bottom: 8px; }
     .login-header p { color: var(--text-muted); }
     .login-btn { height: 48px; font-size: 1rem; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px; }

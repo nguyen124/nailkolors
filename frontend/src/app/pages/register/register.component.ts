@@ -19,7 +19,7 @@ import { AuthService } from '../../services/auth.service';
     <div class="register-wrapper">
       <div class="register-card card">
         <div class="register-header">
-          <a routerLink="/" class="logo">💅 Serenity Nails & Spa</a>
+          <a routerLink="/" class="logo"><img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img"></a>
           <h2>Create Account</h2>
           <p>Join us and enjoy exclusive perks</p>
         </div>
@@ -90,7 +90,8 @@ import { AuthService } from '../../services/auth.service';
     .register-wrapper { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a1a2e, var(--primary-dark)); padding: 24px; }
     .register-card { width: 100%; max-width: 460px; padding: 40px; }
     .register-header { text-align: center; margin-bottom: 28px; }
-    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary); text-decoration: none; display: block; margin-bottom: 16px; }
+    .logo { text-decoration: none; display: block; margin-bottom: 16px; }
+    .logo-img { height: 72px; width: auto; object-fit: contain; }
     .register-header h2 { margin-bottom: 8px; }
     .register-header p { color: var(--text-muted); }
     .role-note { display: flex; align-items: flex-start; gap: 10px; background: #e3f2fd; border-radius: 8px; padding: 12px; margin-bottom: 8px; }

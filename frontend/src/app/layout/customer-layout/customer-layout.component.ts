@@ -15,8 +15,7 @@ import { AuthService } from '../../services/auth.service';
     <header class="site-header">
       <div class="header-inner container">
         <a routerLink="/" class="logo">
-          <span>💅</span>
-          <span class="logo-text">Serenity Nails & Spa</span>
+          <img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img">
         </a>
         <nav class="desktop-nav">
           <a routerLink="/">Home</a>
@@ -45,7 +44,8 @@ import { AuthService } from '../../services/auth.service';
   styles: [`
     .site-header { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); box-shadow: 0 2px 20px rgba(60,144,66,0.08); }
     .header-inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 1.3rem; }
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .logo-img { height: 44px; width: auto; object-fit: contain; }
     .logo-text { font-family: 'Playfair Display', serif; font-weight: 700; color: var(--primary); }
     .desktop-nav { display: flex; gap: 24px; }
     .desktop-nav a { text-decoration: none; color: var(--text-dark); font-weight: 500; transition: color 0.2s; }

@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
     <mat-sidenav-container class="tech-container">
       <mat-sidenav mode="side" opened class="tech-sidenav">
         <div class="sidenav-header">
-          <div class="logo">💅 Serenity Nails & Spa</div>
+          <img src="assets/logo.png" alt="Serenity Nails & Spa" class="logo-img">
           <div class="user-info"><mat-icon>face</mat-icon><span>{{auth.currentUser()?.name}}</span></div>
         </div>
         <mat-nav-list>
@@ -49,7 +49,7 @@ import { Subscription } from 'rxjs';
     .tech-container { height: 100vh; }
     .tech-sidenav { width: 250px; background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); color: white; display: flex; flex-direction: column; }
     .sidenav-header { padding: 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-    .logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--primary-light); margin-bottom: 8px; }
+    .logo-img { height: 56px; width: auto; object-fit: contain; margin-bottom: 8px; }
     .user-info { display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.7); font-size: 0.85rem; }
     .tech-sidenav mat-nav-list a { color: rgba(255,255,255,0.7); border-radius: 8px; margin: 2px 8px; }
     .tech-sidenav mat-nav-list a:hover, .tech-sidenav mat-nav-list a.active { background: rgba(60,144,66,0.2); color: white; }
