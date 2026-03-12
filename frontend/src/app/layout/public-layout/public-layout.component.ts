@@ -17,7 +17,7 @@ import { AuthService } from '../../services/auth.service';
       <div class="header-inner container">
         <a routerLink="/" class="logo">
           <span class="logo-icon">💅</span>
-          <span class="logo-text">Nail Kolors</span>
+          <span class="logo-text">Serenity Nails & Spa</span>
         </a>
         <nav class="desktop-nav">
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
@@ -80,7 +80,7 @@ import { AuthService } from '../../services/auth.service';
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <div class="logo"><span class="logo-icon">💅</span><span class="logo-text">Nail Kolors</span></div>
+            <div class="logo"><span class="logo-icon">💅</span><span class="logo-text">Serenity Nails & Spa</span></div>
             <p>Luxury nail care in a relaxing, welcoming environment.</p>
           </div>
           <div class="footer-links">
@@ -99,11 +99,11 @@ import { AuthService } from '../../services/auth.service';
             <h4>Contact</h4>
             <p><mat-icon>location_on</mat-icon> 123 Beauty Ave, Suite 1</p>
             <p><mat-icon>phone</mat-icon> (555) 123-4567</p>
-            <p><mat-icon>email</mat-icon> hello&#64;nailkolors.com</p>
+            <p><mat-icon>email</mat-icon> hello&#64;serenitynailsspa.com</p>
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2026 Nail Kolors. All rights reserved.</p>
+          <p>&copy; 2026 Serenity Nails & Spa. All rights reserved.</p>
         </div>
       </div>
     </footer>

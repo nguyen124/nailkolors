@@ -37,11 +37,9 @@ router.get('/available-slots', async (req, res) => {
     });
     if (isBlocked) return res.json({ slots: [] });
 
-    // Get existing appointments for that day
-    const start = new Date(date);
-    start.setHours(0, 0, 0, 0);
-    const end = new Date(date);
-    end.setHours(23, 59, 59, 999);
+    // Get existing appointments for that day (use UTC range to match stored UTC midnight dates)
+    const start = new Date(Date.UTC(y, mo - 1, d, 0, 0, 0, 0));
+    const end   = new Date(Date.UTC(y, mo - 1, d, 23, 59, 59, 999));
     const existingAppts = await Appointment.find({
       technicianId,
       date: { $gte: start, $lte: end },
@@ -108,10 +106,10 @@ router.post('/', async (req, res) => {
       technicianId = pool[Math.floor(Math.random() * pool.length)]._id;
     }
 
-    // Check for double booking (parse YYYY-MM-DD as local date)
-    const [dy, dm, dd] = typeof date === 'string' ? date.split('-').map(Number) : [new Date(date).getFullYear(), new Date(date).getMonth()+1, new Date(date).getDate()];
-    const start = new Date(dy, dm - 1, dd, 0, 0, 0, 0);
-    const end = new Date(dy, dm - 1, dd, 23, 59, 59, 999);
+    // Check for double booking (use UTC range to match stored UTC midnight dates)
+    const [dy, dm, dd] = typeof date === 'string' ? date.split('-').map(Number) : [new Date(date).getUTCFullYear(), new Date(date).getUTCMonth()+1, new Date(date).getUTCDate()];
+    const start = new Date(Date.UTC(dy, dm - 1, dd, 0, 0, 0, 0));
+    const end   = new Date(Date.UTC(dy, dm - 1, dd, 23, 59, 59, 999));
 
     const [reqH, reqM] = time.split(':').map(Number);
     const reqStart = reqH * 60 + reqM;

@@ -18,7 +18,7 @@ import { AuthService } from '../../services/auth.service';
     <div class="login-wrapper">
       <div class="login-card card">
         <div class="login-header">
-          <div class="logo">💅 Nail Kolors</div>
+          <div class="logo">💅 Serenity Nails & Spa</div>
           <h2>Sign In</h2>
           <p>Welcome back! Sign in to your account</p>
         </div>

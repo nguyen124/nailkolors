@@ -20,7 +20,7 @@ import { Subscription } from 'rxjs';
     <mat-sidenav-container class="tech-container">
       <mat-sidenav mode="side" opened class="tech-sidenav">
         <div class="sidenav-header">
-          <div class="logo">💅 Nail Kolors</div>
+          <div class="logo">💅 Serenity Nails & Spa</div>
           <div class="user-info"><mat-icon>face</mat-icon><span>{{auth.currentUser()?.name}}</span></div>
         </div>
         <mat-nav-list>

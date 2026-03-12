@@ -16,7 +16,7 @@ import { Service, Post } from '../../models';
     <section class="hero">
       <div class="hero-content">
         <p class="hero-subtitle">Welcome to</p>
-        <h1 class="hero-title">Nail Kolors</h1>
+        <h1 class="hero-title">Serenity Nails &amp; Spa</h1>
         <p class="hero-desc">Experience luxury nail care in a relaxing, welcoming environment. Our expert technicians are dedicated to making you look and feel your best.</p>
         <div class="hero-btns">
           <a routerLink="/book" class="btn-primary">Book Appointment</a>

@@ -17,7 +17,7 @@ const sendConfirmationEmail = async (appointment, service, technician) => {
 
   const customerHtml = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #e91e8c;">Appointment Confirmed - Nail Kolors</h2>
+      <h2 style="color: #e91e8c;">Appointment Confirmed - Serenity Nails & Spa</h2>
       <p>Dear ${appointment.customerName},</p>
       <p>Your appointment has been confirmed!</p>
       <table style="border-collapse: collapse; width: 100%;">
@@ -28,15 +28,15 @@ const sendConfirmationEmail = async (appointment, service, technician) => {
         <tr><td style="padding: 8px; border: 1px solid #ddd;"><strong>Price</strong></td><td style="padding: 8px; border: 1px solid #ddd;">$${service.price}</td></tr>
       </table>
       <p>To view or cancel your appointment, use your email: <strong>${appointment.customerEmail}</strong> or phone: <strong>${appointment.customerPhone}</strong></p>
-      <p style="color: #999; font-size: 12px;">Nail Kolors Salon</p>
+      <p style="color: #999; font-size: 12px;">Serenity Nails & Spa Salon</p>
     </div>
   `;
 
   try {
     await transporter.sendMail({
-      from: `"Nail Kolors" <${process.env.EMAIL_USER}>`,
+      from: `"Serenity Nails & Spa" <${process.env.EMAIL_USER}>`,
       to: appointment.customerEmail,
-      subject: 'Appointment Confirmed - Nail Kolors',
+      subject: 'Appointment Confirmed - Serenity Nails & Spa',
       html: customerHtml
     });
   } catch (err) {

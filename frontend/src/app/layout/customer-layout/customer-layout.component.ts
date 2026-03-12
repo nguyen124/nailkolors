@@ -16,7 +16,7 @@ import { AuthService } from '../../services/auth.service';
       <div class="header-inner container">
         <a routerLink="/" class="logo">
           <span>💅</span>
-          <span class="logo-text">Nail Kolors</span>
+          <span class="logo-text">Serenity Nails & Spa</span>
         </a>
         <nav class="desktop-nav">
           <a routerLink="/">Home</a>
@@ -38,7 +38,7 @@ import { AuthService } from '../../services/auth.service';
     <main><router-outlet></router-outlet></main>
     <footer class="mini-footer">
       <div class="container">
-        <p>&copy; 2026 Nail Kolors &nbsp;·&nbsp; <a routerLink="/contact">Contact</a> &nbsp;·&nbsp; <a routerLink="/blog">Blog</a></p>
+        <p>&copy; 2026 Serenity Nails & Spa &nbsp;·&nbsp; <a routerLink="/contact">Contact</a> &nbsp;·&nbsp; <a routerLink="/blog">Blog</a></p>
       </div>
     </footer>
   `,

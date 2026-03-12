@@ -19,7 +19,7 @@ import { AuthService } from '../../services/auth.service';
     <div class="register-wrapper">
       <div class="register-card card">
         <div class="register-header">
-          <a routerLink="/" class="logo">💅 Nail Kolors</a>
+          <a routerLink="/" class="logo">💅 Serenity Nails & Spa</a>
           <h2>Create Account</h2>
           <p>Join us and enjoy exclusive perks</p>
         </div>

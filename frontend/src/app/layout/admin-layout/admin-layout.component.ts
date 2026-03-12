@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
     <mat-sidenav-container class="admin-container">
       <mat-sidenav mode="side" opened class="admin-sidenav">
         <div class="sidenav-header">
-          <div class="logo">💅 Nail Kolors</div>
+          <div class="logo">💅 Serenity Nails & Spa</div>
           <div class="user-info"><mat-icon>admin_panel_settings</mat-icon><span>Admin Panel</span></div>
         </div>
         <mat-nav-list>
