@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -206,28 +207,53 @@ import { Service, Technician, NailColor } from '../../models';
                 <input matInput formControlName="referenceUrl" type="url"
                   placeholder="https://www.pinterest.com/pin/576460821095578458... or any image URL">
               </mat-form-field>
-              <div class="ref-preview" *ngIf="infoForm.get('referenceUrl')?.value">
-                <img [src]="infoForm.get('referenceUrl')?.value" alt="Reference" class="ref-img"
+              <div class="ref-preview" *ngIf="previewUrl">
+                <img [src]="previewUrl" alt="Reference" class="ref-img"
                   (error)="refImgError = true" (load)="refImgError = false"
                   *ngIf="!refImgError">
                 <div class="ref-link-only" *ngIf="refImgError">
                   <mat-icon>broken_image</mat-icon>
-                  <a [href]="infoForm.get('referenceUrl')?.value" target="_blank" rel="noopener">View reference link</a>
+                  <a [href]="previewUrl" target="_blank" rel="noopener">View reference link</a>
                 </div>
               </div>
             </form>
 
-            <!-- Nail color picker: up to 10 -->
+            <!-- Nail color browser: search + finish-type filter -->
             <div class="color-section" *ngIf="availableColors.length > 0">
               <h4 class="sub-title">
                 <mat-icon>palette</mat-icon> Pick Colors
                 <span class="optional">(optional · up to 10)</span>
                 <span class="color-count-badge" *ngIf="selectedColorIds.length > 0">
-                  {{selectedColorIds.length}} / 10 selected
+                  {{selectedColorIds.length}} / 10
                 </span>
               </h4>
-              <div class="colors-grid">
-                <div class="color-card" *ngFor="let c of availableColors"
+
+              <!-- Finish-type filter chips -->
+              <div class="filter-chips color-filter-chips">
+                <button type="button" class="chip" [class.active]="colorFinishFilter === ''"
+                  (click)="colorFinishFilter = ''; colorPage = 1">All Finishes</button>
+                <button type="button" class="chip" *ngFor="let f of finishTypes"
+                  [class.active]="colorFinishFilter === f"
+                  (click)="colorFinishFilter = f; colorPage = 1">{{f}}</button>
+              </div>
+
+              <!-- Search box -->
+              <div class="color-search-wrap">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input class="color-search-input"
+                  [value]="colorSearch"
+                  (input)="colorSearch = $any($event.target).value; colorPage = 1"
+                  placeholder="Search by color name or brand…"
+                  type="text">
+                <button type="button" class="clear-search" *ngIf="colorSearch"
+                  (click)="colorSearch = ''; colorPage = 1">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+
+              <!-- Color results -->
+              <div class="colors-grid" *ngIf="filteredColors.length > 0">
+                <div class="color-card" *ngFor="let c of visibleColors"
                   [class.selected]="isColorSelected(c._id)"
                   [class.color-limit]="!isColorSelected(c._id) && selectedColorIds.length >= 10"
                   (click)="toggleColor(c._id)">
@@ -239,10 +265,35 @@ import { Service, Technician, NailColor } from '../../models';
                   <mat-icon class="sel-check" *ngIf="isColorSelected(c._id)">check_circle</mat-icon>
                 </div>
               </div>
+
+              <!-- Pagination -->
+              <div class="color-pagination" *ngIf="filteredColors.length > colorPageSize">
+                <button type="button" class="page-btn" [disabled]="colorPage === 1"
+                  (click)="colorPage = colorPage - 1">
+                  <mat-icon>chevron_left</mat-icon>
+                </button>
+                <span class="page-info">
+                  Page {{colorPage}} of {{colorTotalPages}}
+                  <span class="page-total">({{filteredColors.length}} colors)</span>
+                </span>
+                <button type="button" class="page-btn" [disabled]="colorPage === colorTotalPages"
+                  (click)="colorPage = colorPage + 1">
+                  <mat-icon>chevron_right</mat-icon>
+                </button>
+              </div>
+
+              <p class="color-empty" *ngIf="(colorSearch || colorFinishFilter) && filteredColors.length === 0">
+                <mat-icon>search_off</mat-icon> No colors match. Try a different search or filter.
+              </p>
+              <p class="color-prompt" *ngIf="!colorSearch && !colorFinishFilter">
+                <mat-icon>palette</mat-icon> Use the filters or type a name to browse our color collection.
+              </p>
+
               <!-- Selected swatches strip -->
               <div class="selected-swatches" *ngIf="selectedColorIds.length > 0">
                 <span class="swatch-strip-label">Selected:</span>
-                <div class="swatch-strip-item" *ngFor="let id of selectedColorIds" (click)="toggleColor(id)" title="Click to remove">
+                <div class="swatch-strip-item" *ngFor="let id of selectedColorIds"
+                  (click)="toggleColor(id)" title="Click to remove">
                   <div class="color-swatch-sm" [style.background]="getColor(id)?.colorCode"></div>
                   <span class="swatch-name">{{getColor(id)?.colorName}}</span>
                   <mat-icon class="remove-icon">close</mat-icon>
@@ -386,9 +437,27 @@ import { Service, Technician, NailColor } from '../../models';
     .ref-link-only { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--primary); }
     .ref-link-only mat-icon { font-size: 18px; height: 18px; width: 18px; }
 
-    /* Color picker */
+    /* Color browser */
     .color-count-badge { margin-left: auto; background: var(--primary); color: white; font-size: 0.75rem; padding: 2px 10px; border-radius: 50px; font-weight: 600; }
     .color-section { margin-top: 8px; }
+    .color-filter-chips { margin-bottom: 10px; }
+    .color-search-wrap { position: relative; display: flex; align-items: center; margin-bottom: 12px; border: 2px solid #e0e0e0; border-radius: 10px; padding: 0 12px; background: white; transition: border-color 0.2s; }
+    .color-search-wrap:focus-within { border-color: var(--primary); }
+    .search-icon { color: var(--text-muted); font-size: 20px; height: 20px; width: 20px; flex-shrink: 0; margin-right: 8px; }
+    .color-search-input { flex: 1; border: none; outline: none; font-size: 0.9rem; padding: 10px 0; background: transparent; }
+    .clear-search { background: none; border: none; cursor: pointer; display: flex; align-items: center; color: var(--text-muted); padding: 4px; }
+    .clear-search mat-icon { font-size: 18px; height: 18px; width: 18px; }
+    .color-empty { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-style: italic; padding: 16px 0; font-size: 0.9rem; }
+    .color-empty mat-icon { font-size: 18px; height: 18px; width: 18px; color: #bdbdbd; }
+    .color-prompt { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.88rem; padding: 16px 0 8px; }
+    .color-prompt mat-icon { font-size: 18px; height: 18px; width: 18px; color: var(--primary-light); }
+    .color-pagination { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 12px; padding: 8px 0; }
+    .page-btn { background: white; border: 2px solid #e0e0e0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; transition: all 0.2s; padding: 0; }
+    .page-btn:hover:not([disabled]) { border-color: var(--primary); color: var(--primary); }
+    .page-btn[disabled] { opacity: 0.35; cursor: not-allowed; }
+    .page-btn mat-icon { font-size: 20px; height: 20px; width: 20px; }
+    .page-info { font-size: 0.88rem; font-weight: 600; color: var(--primary-dark); }
+    .page-total { font-weight: 400; color: var(--text-muted); }
     .colors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; max-height: 280px; overflow-y: auto; padding-right: 4px; }
     .color-card { display: flex; align-items: center; gap: 10px; padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
     .color-card.selected { border-color: var(--primary); background: var(--bg-light); }
@@ -439,8 +508,8 @@ import { Service, Technician, NailColor } from '../../models';
     }
   `]
 })
-export class BookingComponent implements OnInit {
-  // Step 2 state (tracked as plain properties, not form controls)
+export class BookingComponent implements OnInit, OnDestroy {
+  // Step 2 state
   selectedTechId = '';
   selectedTechName = 'Auto Assign';
   selectedDate: Date | null = null;
@@ -448,12 +517,23 @@ export class BookingComponent implements OnInit {
   timeSlots: string[] = [];
   loadingSlots = false;
 
-  // Step 3 form (real user input — FormGroup works correctly here)
+  // Step 3 form
   infoForm: FormGroup;
+
+  // Step 3 — reference URL debounced preview
+  previewUrl = '';
+  refImgError = false;
+  private urlSub = new Subscription();
+
+  // Step 3 — color browser state
+  colorSearch = '';
+  colorFinishFilter = '';
+  colorPage = 1;
+  readonly colorPageSize = 50;
+  finishTypes = ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'];
 
   // Step 4 / shared
   selectedColorIds: string[] = [];
-  refImgError = false;
   submitting = false;
 
   // Data
@@ -470,6 +550,28 @@ export class BookingComponent implements OnInit {
 
   get step2Done(): boolean {
     return !!this.selectedTechId && !!this.selectedDate && !!this.selectedTime;
+  }
+
+  get filteredColors(): NailColor[] {
+    const search = this.colorSearch.trim().toLowerCase();
+    const finish = this.colorFinishFilter;
+    if (!search && !finish) return [];
+    return this.availableColors.filter(c => {
+      const matchesFinish = !finish || c.finishType === finish;
+      const matchesSearch = !search ||
+        c.colorName.toLowerCase().includes(search) ||
+        c.brand.toLowerCase().includes(search);
+      return matchesFinish && matchesSearch;
+    });
+  }
+
+  get visibleColors(): NailColor[] {
+    const start = (this.colorPage - 1) * this.colorPageSize;
+    return this.filteredColors.slice(start, start + this.colorPageSize);
+  }
+
+  get colorTotalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredColors.length / this.colorPageSize));
   }
 
   constructor(
@@ -503,6 +605,19 @@ export class BookingComponent implements OnInit {
       });
     });
     this.colorService.getAll({ status: 'available' }).subscribe(c => this.availableColors = c);
+
+    // Debounce reference URL input — wait 600 ms after typing stops, then update preview
+    this.urlSub = this.infoForm.get('referenceUrl')!.valueChanges.pipe(
+      debounceTime(600),
+      distinctUntilChanged()
+    ).subscribe((url: string) => {
+      this.refImgError = false;
+      this.previewUrl = url?.trim() || '';
+    });
+  }
+
+  ngOnDestroy() {
+    this.urlSub.unsubscribe();
   }
 
   filterServices(cat: string) {

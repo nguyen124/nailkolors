@@ -12,11 +12,27 @@ import { NailColor } from '../../models';
     <section class="section">
       <div class="container">
         <div class="filter-bar">
-          <div class="filter-chips">
-            <button class="chip" [class.active]="activeFilter===''" (click)="filterColors('')">All</button>
-            <button class="chip" *ngFor="let f of finishes" [class.active]="activeFilter===f" (click)="filterColors(f)">{{f}}</button>
+          <!-- Finish type -->
+          <div class="filter-row">
+            <span class="filter-label">Finish</span>
+            <div class="filter-chips">
+              <button class="chip" [class.active]="activeFilter===''" (click)="filterColors('')">All</button>
+              <button class="chip" *ngFor="let f of finishes" [class.active]="activeFilter===f" (click)="filterColors(f)">{{f}}</button>
+            </div>
           </div>
-          <button class="chip" [class.active]="showAvailable" (click)="showAvailable=!showAvailable;applyFilters()">Available Only</button>
+          <!-- Brand -->
+          <div class="filter-row" *ngIf="brands.length > 0">
+            <span class="filter-label">Brand</span>
+            <div class="filter-chips">
+              <button class="chip" [class.active]="activeBrand===''" (click)="activeBrand='';applyFilters()">All</button>
+              <button class="chip" *ngFor="let b of brands" [class.active]="activeBrand===b" (click)="activeBrand=b;applyFilters()">{{b}}</button>
+            </div>
+          </div>
+          <!-- Stock -->
+          <div class="filter-row">
+            <span class="filter-label">Stock</span>
+            <button class="chip" [class.active]="showAvailable" (click)="showAvailable=!showAvailable;applyFilters()">Available Only</button>
+          </div>
         </div>
         <div class="colors-grid">
           <div class="color-card card" *ngFor="let c of filteredColors">
@@ -42,7 +58,9 @@ import { NailColor } from '../../models';
   styles: [`
     .page-hero { background: linear-gradient(135deg, #2d6e32, var(--primary)); color: white; padding: 80px 0; text-align: center; }
     .page-hero h1 { font-size: 3rem; margin-bottom: 16px; }
-    .filter-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
+    .filter-bar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; padding: 20px; background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .filter-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .filter-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-muted); white-space: nowrap; min-width: 44px; }
     .filter-chips { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip { padding: 6px 20px; border: 2px solid var(--primary-light); border-radius: 50px; background: white; color: var(--primary); cursor: pointer; font-weight: 600; text-transform: capitalize; transition: all 0.2s; }
     .chip.active, .chip:hover { background: var(--primary); color: white; border-color: var(--primary); }
@@ -57,7 +75,7 @@ import { NailColor } from '../../models';
     .color-info p { font-size: 0.8rem; color: var(--text-muted); }
     .finish-tag { font-size: 0.7rem; background: var(--primary-light); color: var(--primary-dark); padding: 2px 8px; border-radius: 50px; text-transform: capitalize; }
     .empty { text-align: center; color: var(--text-muted); margin-top: 48px; }
-    @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .colors-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .filter-bar { flex-direction: column; align-items: flex-start; } }
+    @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .colors-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .filter-row { flex-direction: column; align-items: flex-start; } }
     @media (max-width: 480px) { .page-hero h1 { font-size: 1.6rem; } .colors-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
   `]
 })
@@ -66,15 +84,23 @@ export class GalleryComponent implements OnInit {
   filteredColors: NailColor[] = [];
   finishes = ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'];
   activeFilter = '';
+  activeBrand = '';
   showAvailable = false;
+
+  get brands(): string[] {
+    const set = new Set(this.colors.map(c => c.brand).filter(Boolean));
+    return Array.from(set).sort();
+  }
+
   constructor(private colorService: ColorService) {}
   ngOnInit() { this.colorService.getAll().subscribe(c => { this.colors = c; this.filteredColors = c; }); }
   filterColors(finish: string) { this.activeFilter = finish; this.applyFilters(); }
   applyFilters() {
     this.filteredColors = this.colors.filter(c => {
       const finishMatch = !this.activeFilter || c.finishType === this.activeFilter;
+      const brandMatch  = !this.activeBrand  || c.brand === this.activeBrand;
       const statusMatch = !this.showAvailable || c.status === 'available';
-      return finishMatch && statusMatch;
+      return finishMatch && brandMatch && statusMatch;
     });
   }
 }
