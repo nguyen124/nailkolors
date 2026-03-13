@@ -6,6 +6,7 @@ const nailColorSchema = new mongoose.Schema({
   colorCode: { type: String, required: true },
   finishType: { type: String, enum: ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'], required: true },
   image: { type: String, default: '' },
+  dotImage: { type: String, default: '' },
   quantity: { type: Number, default: 0, min: 0 },
   status: { type: String, enum: ['available','out-of-stock'], default: 'available' }
 }, { timestamps: true });

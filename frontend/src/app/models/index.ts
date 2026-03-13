@@ -43,6 +43,7 @@ export interface NailColor {
   colorCode: string;
   finishType: 'Shiny' | 'Matte' | 'Glitter' | 'Cat Eyes' | 'Holographic';
   image: string;
+  dotImage: string;
   quantity: number;
   status: 'available' | 'out-of-stock';
 }

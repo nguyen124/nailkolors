@@ -42,7 +42,7 @@ import { NailColor } from '../../models';
               </span>
             </div>
             <div class="color-info">
-              <div class="color-dot" [style.background]="c.colorCode"></div>
+              <div class="color-dot" [style.background-image]="'url(' + c.dotImage + ')'" style="background-size:cover;background-position:center"></div>
               <div>
                 <h4>{{c.colorName}}</h4>
                 <p>{{c.brand}}</p>
