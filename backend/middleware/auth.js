@@ -24,4 +24,11 @@ const technicianOrAdmin = (req, res, next) => {
   next();
 };
 
-module.exports = { auth, adminOnly, technicianOrAdmin };
+const salonOwnerOrAdmin = (req, res, next) => {
+  if (!['admin', 'salon_owner'].includes(req.user.role)) {
+    return res.status(403).json({ message: 'Access denied' });
+  }
+  next();
+};
+
+module.exports = { auth, adminOnly, technicianOrAdmin, salonOwnerOrAdmin };

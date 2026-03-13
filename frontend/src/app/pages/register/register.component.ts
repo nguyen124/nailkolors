@@ -102,6 +102,7 @@ export class RegisterComponent {
   redirectByRole(role?: string) {
     if (role === 'admin') this.router.navigate(['/admin']);
     else if (role === 'technician') this.router.navigate(['/technician']);
+    else if (role === 'salon_owner') this.router.navigate(['/salon-owner']);
     else this.router.navigate(['/customer']);
   }
 

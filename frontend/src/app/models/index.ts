@@ -3,7 +3,7 @@ export interface User {
   name: string;
   email: string;
   phone?: string;
-  role: 'admin' | 'technician' | 'customer';
+  role: 'admin' | 'technician' | 'customer' | 'salon_owner';
 }
 
 export interface WorkingHours {
@@ -61,6 +61,16 @@ export interface Appointment {
   status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
   notes: string;
   createdAt: string;
+}
+
+export interface SalonOwner {
+  _id: string;
+  userId: string | User;
+  salonName: string;
+  address: string;
+  phone: string;
+  bio: string;
+  logo: string;
 }
 
 export interface Post {

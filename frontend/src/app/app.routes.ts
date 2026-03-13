@@ -3,6 +3,7 @@ import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guard';
 import { technicianGuard } from './guards/technician.guard';
 import { customerGuard } from './guards/customer.guard';
+import { salonOwnerGuard } from './guards/salon-owner.guard';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,7 @@ export const routes: Routes = [
       { path: 'technicians', loadComponent: () => import('./pages/admin/technicians/technicians.component').then(m => m.AdminTechniciansComponent) },
       { path: 'appointments', loadComponent: () => import('./pages/admin/appointments/appointments.component').then(m => m.AdminAppointmentsComponent) },
       { path: 'posts', loadComponent: () => import('./pages/admin/posts/posts.component').then(m => m.AdminPostsComponent) },
+      { path: 'salon-owners', loadComponent: () => import('./pages/admin/salon-owners/salon-owners.component').then(m => m.AdminSalonOwnersComponent) },
     ]
   },
   {
@@ -55,6 +57,16 @@ export const routes: Routes = [
       { path: 'dashboard', loadComponent: () => import('./pages/technician/dashboard/dashboard.component').then(m => m.TechnicianDashboardComponent) },
       { path: 'schedule', loadComponent: () => import('./pages/technician/schedule/schedule.component').then(m => m.TechnicianScheduleComponent) },
       { path: 'availability', loadComponent: () => import('./pages/technician/availability/availability.component').then(m => m.TechnicianAvailabilityComponent) },
+    ]
+  },
+  {
+    path: 'salon-owner',
+    loadComponent: () => import('./layout/salon-owner-layout/salon-owner-layout.component').then(m => m.SalonOwnerLayoutComponent),
+    canActivate: [authGuard, salonOwnerGuard],
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', loadComponent: () => import('./pages/salon-owner/dashboard/dashboard.component').then(m => m.SalonOwnerDashboardComponent) },
+      { path: 'colors', loadComponent: () => import('./pages/salon-owner/colors/colors.component').then(m => m.SalonOwnerColorsComponent) },
     ]
   },
   { path: '**', redirectTo: '' }

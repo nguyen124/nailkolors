@@ -42,6 +42,9 @@ import { Subscription } from 'rxjs';
           <a mat-list-item routerLink="/admin/posts" routerLinkActive="active">
             <mat-icon matListItemIcon>article</mat-icon><span matListItemTitle>Blog / Promos</span>
           </a>
+          <a mat-list-item routerLink="/admin/salon-owners" routerLinkActive="active">
+            <mat-icon matListItemIcon>store</mat-icon><span matListItemTitle>Salon Owners</span>
+          </a>
         </mat-nav-list>
         <div class="sidenav-footer">
           <a mat-list-item routerLink="/"><mat-icon matListItemIcon>public</mat-icon><span matListItemTitle>View Site</span></a>
