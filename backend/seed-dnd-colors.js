@@ -10,6 +10,81 @@ const NailColor = require('./models/NailColor');
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/nailkolors';
 
 // ---------------------------------------------------------------------------
+// SWATCH (hover) image URLs scraped from dndgel.com/collections/dnd-duo
+// These are the 2nd image per product — the nail swatch shown on hover.
+// ---------------------------------------------------------------------------
+const CDN = 'https://cdn.shopify.com/s/files/1/0695/1583/7721';
+const KNOWN_IMAGES = {
+  // Page 1 — confirmed swatch/hover images
+  404: `${CDN}/files/DND-404-SWATCH.png?v=1755193698`,
+  405: `${CDN}/files/DND-405-SWATCH.png?v=1755193700`,
+  412: `${CDN}/files/DND-412-DUO.png?v=1755195269`,
+  413: `${CDN}/files/DND-413-SWATCH_2.png?v=1755193712`,
+  414: `${CDN}/files/DND-414-SWATCH_2.png?v=1755193714`,
+  426: `${CDN}/files/DND-426-SWATCH.jpg?v=1755193731`,
+  429: `${CDN}/products/Boston-University-Red-DND-429.jpg?v=1755193737`,
+  430: `${CDN}/products/dnd-430-ferrrari-red.jpg?v=1756925302`,
+  435: `${CDN}/files/DND-435-SWATCH.png?v=1756928560`,
+  438: `${CDN}/files/DND-438-SWATCH.png?v=1756934995`,
+  447: `${CDN}/files/DND-447-SWATCH.png?v=1756942635`,
+  448: `${CDN}/products/448-3.jpg?v=1756942768`,
+  450: `${CDN}/files/DND-450-SWATCH_73fba46a-9297-422e-9eae-61faa7ca1356.png?v=1756944164`,
+  457: `${CDN}/files/DND-457-SWATCH.png?v=1757004918`,
+  473: `${CDN}/products/dnd-473.jpg?v=1756849833`,
+  484: `${CDN}/files/DND-484-SWATCH_5ebf10f9-521f-4ad5-9688-01d4dedf5d47.png?v=1757024203`,
+  529: `${CDN}/files/DND-529-DOT.jpg?v=1755193876`,
+  532: `${CDN}/files/DND-532-SWATCH.jpg?v=1755193881`,
+  536: `${CDN}/files/DND-536-SWATCH.jpg?v=1759863478`,
+  537: `${CDN}/files/DND-537-SWATCH.png?v=1759863805`,
+  544: `${CDN}/files/DND-544-SWATCH.jpg?v=1755193899`,
+  553: `${CDN}/files/DND-553-DOT.webp?v=1759961483`,
+  571: `${CDN}/files/DND-571-SWATCH.png?v=1760031397`,
+  573: `${CDN}/files/DND-573-SWATCH.png?v=1760032181`,
+  574: `${CDN}/files/DND-574-SWATCH.png?v=1760385053`,
+  601: `${CDN}/files/Ballet_Pink_DND_601.jpg?v=1760393825`,
+  606: `${CDN}/products/dnd-london-coach-606.jpg?v=1760459341`,
+  622: `${CDN}/files/DND-622-DUO.png?v=1760554078`,
+  623: `${CDN}/files/DND-623-DOT.png?v=1762198742`,
+  633: `${CDN}/files/DND-633-FS.png?v=1768866407`,
+  636: `${CDN}/files/DND-636-DOT.png?v=1755718256`,
+  640: `${CDN}/files/DND-640-FS_2.png?v=1760565368`,
+  642: `${CDN}/files/DND-642-SWATCH.jpg?v=1760565532`,
+  656: `${CDN}/files/DND-656-SWATCH_2.jpg?v=1760727682`,
+  671: `${CDN}/files/671.webp?v=1761160166`,
+  672: `${CDN}/products/672-1.jpg?v=1761160968`,
+  694: `${CDN}/files/DND-694-SWATCH.png?v=1755194084`,
+  699: `${CDN}/files/699.webp?v=1756340457`,
+  703: `${CDN}/files/DND-703-SWATCH_2.png?v=1771870794`,
+  705: `${CDN}/files/705.webp?v=1756340537`,
+  706: `${CDN}/files/DND-706-SWATCH.png?v=1755194101`,
+  714: `${CDN}/products/714-1.jpg?v=1768592962`,
+  717: `${CDN}/files/717.webp?v=1756340786`,
+  726: `${CDN}/products/whirly-pop.jpg?v=1772576981`,
+  731: `${CDN}/files/DND-731-SWATCH_dcea6c45-2a04-4185-aaa0-249e1746dcb2.png?v=1755194478`,
+  734: `${CDN}/files/DND-734-SWATCH_2.png?v=1755194482`,
+  740: `${CDN}/files/DND-740-SWATCH_3.png?v=1772576616`,
+  741: `${CDN}/files/DND-741-FS.png?v=1755194495`,
+  745: `${CDN}/files/DND-745-FS.png?v=1772576461`,
+  747: `${CDN}/products/DND-747-2.jpg?v=1755195215`,
+  749: `${CDN}/products/749-2.jpg?v=1756497833`,
+  750: `${CDN}/files/DND-750-SWATCH_951bc105-d7bd-4436-9784-c90ec04e69fc.png?v=1763489998`,
+  751: `${CDN}/files/DND-751-SWATCH_1c6cf85f-a37a-465f-932f-b08f354523b0.png?v=1755195227`,
+  753: `${CDN}/files/DND-753-SWATCH.png?v=1755195231`,
+  757: `${CDN}/products/757.jpg?v=1762197935`,
+  772: `${CDN}/files/772.webp?v=1756341863`,
+  785: `${CDN}/products/Voo-Doo-785_721a2f50-d0e8-4f6a-989b-097a4e746607.jpg?v=1772576070`,
+  792: `${CDN}/products/Bubbles-DND-792_0fbcf80a-34e4-4e50-8604-cd666748bc1a.jpg?v=1772575687`,
+  795: `${CDN}/files/supernovadnd795swatch.webp?v=1769106708`,
+  807: `${CDN}/products/cotton-candy-dnd807_681a7496-baf7-4c7c-bbd6-94fe435fe63b.jpg?v=1772578412`,
+};
+
+// For colors not in the map, fall back to the standard SWATCH pattern
+function colorImage(numStr) {
+  const num = parseInt(numStr.replace('#', ''), 10);
+  return KNOWN_IMAGES[num] || `${CDN}/files/DND-${num}-SWATCH.png`;
+}
+
+// ---------------------------------------------------------------------------
 // Hex approximations based on color name semantics
 // ---------------------------------------------------------------------------
 function nameToHex(name) {
@@ -299,7 +374,7 @@ async function seed() {
     finishType: nameToFinish(name),
     quantity: 1,
     status: 'available',
-    image: '',
+    image: colorImage(num),
   }));
 
   const inserted = await NailColor.insertMany(docs);
