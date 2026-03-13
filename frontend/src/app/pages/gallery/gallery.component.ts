@@ -34,8 +34,9 @@ import { NailColor } from '../../models';
             <button class="chip" [class.active]="showAvailable" (click)="showAvailable=!showAvailable;applyFilters()">Available Only</button>
           </div>
         </div>
+
         <div class="colors-grid">
-          <div class="color-card card" *ngFor="let c of filteredColors">
+          <div class="color-card card" *ngFor="let c of pagedColors">
             <div class="color-swatch" [style.background]="c.image ? 'url(' + c.image + ') center/cover' : c.colorCode">
               <span class="status-badge" [class.available]="c.status==='available'" [class.out]="c.status==='out-of-stock'">
                 {{c.status === 'available' ? '✓ In Stock' : '✗ Out of Stock'}}
@@ -52,6 +53,22 @@ import { NailColor } from '../../models';
           </div>
         </div>
         <p class="empty" *ngIf="filteredColors.length === 0">No colors found.</p>
+
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="totalPages > 1">
+          <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(1)">«</button>
+          <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">‹</button>
+          <button class="page-btn" *ngFor="let p of pageNumbers"
+            [class.active]="p === currentPage"
+            [class.ellipsis]="p === -1"
+            [disabled]="p === -1"
+            (click)="p !== -1 && goToPage(p)">
+            {{p === -1 ? '…' : p}}
+          </button>
+          <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">›</button>
+          <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(totalPages)">»</button>
+          <span class="page-info">{{(currentPage - 1) * pageSize + 1}}–{{min(currentPage * pageSize, filteredColors.length)}} of {{filteredColors.length}}</span>
+        </div>
       </div>
     </section>
   `,
@@ -75,6 +92,13 @@ import { NailColor } from '../../models';
     .color-info p { font-size: 0.8rem; color: var(--text-muted); }
     .finish-tag { font-size: 0.7rem; background: var(--primary-light); color: var(--primary-dark); padding: 2px 8px; border-radius: 50px; text-transform: capitalize; }
     .empty { text-align: center; color: var(--text-muted); margin-top: 48px; }
+    .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 40px; flex-wrap: wrap; }
+    .page-btn { min-width: 36px; height: 36px; padding: 0 10px; border: 2px solid var(--primary-light); border-radius: 8px; background: white; color: var(--primary); cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+    .page-btn:hover:not([disabled]) { background: var(--primary); color: white; border-color: var(--primary); }
+    .page-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .page-btn[disabled] { opacity: 0.35; cursor: default; }
+    .page-btn.ellipsis { border-color: transparent; background: transparent; cursor: default; }
+    .page-info { font-size: 0.82rem; color: var(--text-muted); margin-left: 8px; }
     @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .colors-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .filter-row { flex-direction: column; align-items: flex-start; } }
     @media (max-width: 480px) { .page-hero h1 { font-size: 1.6rem; } .colors-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
   `]
@@ -87,14 +111,49 @@ export class GalleryComponent implements OnInit {
   activeBrand = '';
   showAvailable = false;
 
+  readonly pageSize = 40;
+  currentPage = 1;
+
   get brands(): string[] {
     const set = new Set(this.colors.map(c => c.brand).filter(Boolean));
     return Array.from(set).sort();
   }
 
+  get totalPages(): number {
+    return Math.ceil(this.filteredColors.length / this.pageSize);
+  }
+
+  get pagedColors(): NailColor[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredColors.slice(start, start + this.pageSize);
+  }
+
+  get pageNumbers(): number[] {
+    const total = this.totalPages;
+    const cur = this.currentPage;
+    const pages: number[] = [];
+    if (total <= 7) {
+      for (let i = 1; i <= total; i++) pages.push(i);
+    } else {
+      pages.push(1);
+      if (cur > 3) pages.push(-1);
+      for (let i = Math.max(2, cur - 1); i <= Math.min(total - 1, cur + 1); i++) pages.push(i);
+      if (cur < total - 2) pages.push(-1);
+      pages.push(total);
+    }
+    return pages;
+  }
+
+  min(a: number, b: number) { return Math.min(a, b); }
+
   constructor(private colorService: ColorService) {}
-  ngOnInit() { this.colorService.getAll().subscribe(c => { this.colors = c; this.filteredColors = c; }); }
+
+  ngOnInit() {
+    this.colorService.getAll().subscribe(c => { this.colors = c; this.filteredColors = c; });
+  }
+
   filterColors(finish: string) { this.activeFilter = finish; this.applyFilters(); }
+
   applyFilters() {
     this.filteredColors = this.colors.filter(c => {
       const finishMatch = !this.activeFilter || c.finishType === this.activeFilter;
@@ -102,5 +161,11 @@ export class GalleryComponent implements OnInit {
       const statusMatch = !this.showAvailable || c.status === 'available';
       return finishMatch && brandMatch && statusMatch;
     });
+    this.currentPage = 1;
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
