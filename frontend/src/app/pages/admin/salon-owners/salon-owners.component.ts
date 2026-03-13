@@ -189,7 +189,7 @@ export class AdminSalonOwnersComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Remove this salon owner? Their account will be downgraded to customer.')) return;
+    if (!confirm('Remove this salon owner? This will permanently delete their account and all their color inventory.')) return;
     this.http.delete(`/api/salon-owners/${id}`, { headers: this.headers() }).subscribe({
       next: () => { this.snackBar.open('Removed', 'OK', { duration: 2000 }); this.load(); }
     });

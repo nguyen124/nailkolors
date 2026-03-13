@@ -84,7 +84,10 @@ router.put('/:id', auth, technicianOrAdmin, upload.single('photo'), async (req, 
 
 router.delete('/:id', auth, adminOnly, async (req, res) => {
   try {
-    await Technician.findByIdAndUpdate(req.params.id, { isActive: false });
+    const tech = await Technician.findById(req.params.id);
+    if (!tech) return res.status(404).json({ message: 'Not found' });
+    await Technician.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(tech.userId);
     res.json({ message: 'Technician removed' });
   } catch (err) { res.status(500).json({ message: err.message }); }
 });

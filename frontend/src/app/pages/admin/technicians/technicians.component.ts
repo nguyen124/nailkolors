@@ -328,7 +328,7 @@ export class AdminTechniciansComponent implements OnInit {
   }
 
   delete(id: string) {
-    if (!confirm('Remove this technician?')) return;
+    if (!confirm('Remove this technician? This will permanently delete their account.')) return;
     this.techService.delete(id).subscribe({ next: () => { this.snackBar.open('Removed', 'OK', { duration: 2000 }); this.load(); } });
   }
 }

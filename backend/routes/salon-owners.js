@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const User = require('../models/User');
 const SalonOwner = require('../models/SalonOwner');
+const NailColor = require('../models/NailColor');
 const { auth, adminOnly, salonOwnerOrAdmin } = require('../middleware/auth');
 
 const router = express.Router();
@@ -63,13 +64,14 @@ router.put('/:id', auth, salonOwnerOrAdmin, upload.single('logo'), async (req, r
   } catch (err) { res.status(400).json({ message: err.message }); }
 });
 
-// DELETE — admin only
+// DELETE — admin only (removes profile, user account, and all their colors)
 router.delete('/:id', auth, adminOnly, async (req, res) => {
   try {
     const profile = await SalonOwner.findById(req.params.id);
     if (!profile) return res.status(404).json({ message: 'Not found' });
-    await User.findByIdAndUpdate(profile.userId, { role: 'customer' });
+    await NailColor.deleteMany({ ownerId: profile.userId });
     await SalonOwner.findByIdAndDelete(req.params.id);
+    await User.findByIdAndDelete(profile.userId);
     res.json({ message: 'Salon owner removed' });
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
