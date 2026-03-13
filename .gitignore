@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Angular build cache
+frontend/.angular/cache/
+
+# Build output
+frontend/dist/
+
+# Environment files
+backend/.env
+.env
+
+# Uploads (user-generated files)
+backend/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
