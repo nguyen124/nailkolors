@@ -99,7 +99,7 @@ import { NailColor } from '../../models';
     .status-badge.available { background: rgba(46,125,50,0.9); color: white; }
     .status-badge.out { background: rgba(198,40,40,0.9); color: white; }
     .color-info { display: flex; align-items: center; gap: 12px; padding: 12px; }
-    .color-dot { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(0,0,0,0.1); }
+    .color-dot { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;}
     .color-info h4 { font-size: 0.9rem; margin-bottom: 2px; }
     .color-info p { font-size: 0.8rem; color: var(--text-muted); }
     .finish-tag { font-size: 0.7rem; background: var(--primary-light); color: var(--primary-dark); padding: 2px 8px; border-radius: 50px; text-transform: capitalize; }
