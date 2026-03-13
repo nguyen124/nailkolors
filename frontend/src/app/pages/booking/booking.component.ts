@@ -128,6 +128,7 @@ import { Service, Technician, NailColor } from '../../models';
               <mat-form-field class="date-field">
                 <mat-label>Appointment Date</mat-label>
                 <input matInput [matDatepicker]="picker" [min]="minDate"
+                  [matDatepickerFilter]="dateFilter"
                   [value]="selectedDate"
                   (dateChange)="onDateChange($event.value)">
                 <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
@@ -512,10 +513,23 @@ export class BookingComponent implements OnInit, OnDestroy {
   // Step 2 state
   selectedTechId = '';
   selectedTechName = 'Auto Assign';
+  selectedTech: Technician | null = null;
   selectedDate: Date | null = null;
   selectedTime = '';
   timeSlots: string[] = [];
   loadingSlots = false;
+
+  // Datepicker filter — disables off days and blocked dates for the chosen technician
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) return false;
+    if (!this.selectedTech) return true; // auto-assign: allow all
+    const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const dayName = dayNames[date.getDay()];
+    const wh = (this.selectedTech.workingHours || []).find(h => h.day === dayName);
+    if (wh && !wh.isWorking) return false;
+    const blocked = (this.selectedTech.blockedDates || []).map(d => new Date(d).toDateString());
+    return !blocked.includes(date.toDateString());
+  };
 
   // Step 3 form
   infoForm: FormGroup;
@@ -640,6 +654,7 @@ export class BookingComponent implements OnInit, OnDestroy {
   pickTechnician(id: string, tech: Technician | null) {
     this.selectedTechId = id;
     this.selectedTechName = tech ? tech.name : 'Auto Assign';
+    this.selectedTech = tech;
     this.selectedDate = null;
     this.selectedTime = '';
     this.timeSlots = [];

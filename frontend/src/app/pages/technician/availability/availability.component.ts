@@ -83,7 +83,8 @@ export class TechnicianAvailabilityComponent implements OnInit {
   get daysArray() { return this.hoursForm.get('days') as FormArray; }
 
   constructor(private techService: TechnicianService, private fb: FormBuilder, private snackBar: MatSnackBar) {
-    this.hoursForm = this.fb.group({ days: this.fb.array(DAYS.map(day => this.fb.group({ day, isWorking: [true], start: ['09:00'], end: ['18:00'] }))) });
+    const isSunday = (d: string) => d === 'Sunday';
+    this.hoursForm = this.fb.group({ days: this.fb.array(DAYS.map(day => this.fb.group({ day, isWorking: [true], start: [isSunday(day) ? '11:30' : '09:30'], end: [isSunday(day) ? '17:00' : '19:00'] }))) });
   }
 
   ngOnInit() {

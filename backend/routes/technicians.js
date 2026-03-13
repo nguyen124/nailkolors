@@ -39,14 +39,15 @@ router.get('/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
+// Matches salon opening hours: Mon–Sat 9:30am–7pm, Sun 11:30am–5pm
 const DEFAULT_WORKING_HOURS = [
-  { day: 'Monday',    isWorking: true,  start: '09:00', end: '18:00' },
-  { day: 'Tuesday',   isWorking: true,  start: '09:00', end: '18:00' },
-  { day: 'Wednesday', isWorking: true,  start: '09:00', end: '18:00' },
-  { day: 'Thursday',  isWorking: true,  start: '09:00', end: '18:00' },
-  { day: 'Friday',    isWorking: true,  start: '09:00', end: '18:00' },
-  { day: 'Saturday',  isWorking: false, start: '09:00', end: '18:00' },
-  { day: 'Sunday',    isWorking: false, start: '09:00', end: '18:00' },
+  { day: 'Monday',    isWorking: true, start: '09:30', end: '19:00' },
+  { day: 'Tuesday',   isWorking: true, start: '09:30', end: '19:00' },
+  { day: 'Wednesday', isWorking: true, start: '09:30', end: '19:00' },
+  { day: 'Thursday',  isWorking: true, start: '09:30', end: '19:00' },
+  { day: 'Friday',    isWorking: true, start: '09:30', end: '19:00' },
+  { day: 'Saturday',  isWorking: true, start: '09:30', end: '19:00' },
+  { day: 'Sunday',    isWorking: true, start: '11:30', end: '17:00' },
 ];
 
 router.post('/', auth, adminOnly, upload.single('photo'), async (req, res) => {
