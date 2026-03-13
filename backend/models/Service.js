@@ -7,7 +7,8 @@ const serviceSchema = new mongoose.Schema({
   category: { type: String, enum: ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'], required: true },
   description: { type: String, default: '' },
   image: { type: String, default: '' },
-  isActive: { type: Boolean, default: true }
+  isActive: { type: Boolean, default: true },
+  salonId: { type: mongoose.Schema.Types.ObjectId, ref: 'SalonOwner', default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Service', serviceSchema);

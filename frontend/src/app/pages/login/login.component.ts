@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -65,14 +66,19 @@ export class LoginComponent {
   form: FormGroup;
   loading = false;
   showPass = false;
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snackBar: MatSnackBar) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router, private snackBar: MatSnackBar, private http: HttpClient) {
     this.form = this.fb.group({ email: ['', [Validators.required, Validators.email]], password: ['', [Validators.required, Validators.minLength(6)]] });
     if (auth.isLoggedIn()) { this.redirectByRole(auth.currentUser()?.role); }
   }
   redirectByRole(role?: string) {
     if (role === 'admin') this.router.navigate(['/admin']);
     else if (role === 'technician') this.router.navigate(['/technician']);
-    else if (role === 'salon_owner') this.router.navigate(['/salon-owner']);
+    else if (role === 'salon_owner') {
+      this.http.get<any>('/api/salon-owners/me').subscribe({
+        next: profile => this.router.navigate(['/salon-owner', profile.slug]),
+        error: () => this.router.navigate(['/'])
+      });
+    }
     else this.router.navigate(['/customer']);
   }
 

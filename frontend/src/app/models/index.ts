@@ -67,6 +67,7 @@ export interface SalonOwner {
   _id: string;
   userId: string | User;
   salonName: string;
+  slug: string;
   address: string;
   phone: string;
   bio: string;

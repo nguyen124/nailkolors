@@ -25,10 +25,13 @@ router.get('/', async (req, res) => {
       if (!token) return res.status(401).json({ message: 'Auth required' });
       const jwt = require('jsonwebtoken');
       const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret');
-      filter.ownerId = decoded.id;
+      const SalonOwner = require('../models/SalonOwner');
+      const profile = await SalonOwner.findOne({ userId: decoded.id });
+      if (!profile) return res.status(404).json({ message: 'Salon owner profile not found' });
+      filter.salonId = profile._id;
     } else {
       // Public gallery — only main salon colors
-      filter.ownerId = null;
+      filter.salonId = null;
     }
 
     const colors = await NailColor.find(filter).sort({ brand: 1, colorName: 1 });
@@ -36,13 +39,19 @@ router.get('/', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// POST — admin creates main salon color (ownerId=null); salon_owner creates own color
+// POST — admin creates main salon color (salonId=null); salon_owner creates own color
 router.post('/', auth, salonOwnerOrAdmin, upload.single('image'), async (req, res) => {
   try {
     const data = { ...req.body };
     if (req.file) data.image = `/uploads/colors/${req.file.filename}`;
     data.quantity = parseInt(data.quantity) || 0;
-    data.ownerId = req.user.role === 'admin' ? null : req.user.id;
+    if (req.user.role === 'admin') {
+      data.salonId = null;
+    } else {
+      const SalonOwner = require('../models/SalonOwner');
+      const profile = await SalonOwner.findOne({ userId: req.user.id });
+      data.salonId = profile?._id || null;
+    }
     const color = new NailColor(data);
     await color.save();
     res.status(201).json(color);
@@ -54,8 +63,12 @@ router.put('/:id', auth, salonOwnerOrAdmin, upload.single('image'), async (req, 
   try {
     const color = await NailColor.findById(req.params.id);
     if (!color) return res.status(404).json({ message: 'Not found' });
-    if (req.user.role === 'salon_owner' && String(color.ownerId) !== String(req.user.id)) {
-      return res.status(403).json({ message: 'Not your color' });
+    if (req.user.role === 'salon_owner') {
+      const SalonOwner = require('../models/SalonOwner');
+      const profile = await SalonOwner.findOne({ userId: req.user.id });
+      if (!profile || String(color.salonId) !== String(profile._id)) {
+        return res.status(403).json({ message: 'Not your color' });
+      }
     }
     const data = { ...req.body };
     if (req.file) data.image = `/uploads/colors/${req.file.filename}`;
@@ -73,8 +86,12 @@ router.delete('/:id', auth, salonOwnerOrAdmin, async (req, res) => {
   try {
     const color = await NailColor.findById(req.params.id);
     if (!color) return res.status(404).json({ message: 'Not found' });
-    if (req.user.role === 'salon_owner' && String(color.ownerId) !== String(req.user.id)) {
-      return res.status(403).json({ message: 'Not your color' });
+    if (req.user.role === 'salon_owner') {
+      const SalonOwner = require('../models/SalonOwner');
+      const profile = await SalonOwner.findOne({ userId: req.user.id });
+      if (!profile || String(color.salonId) !== String(profile._id)) {
+        return res.status(403).json({ message: 'Not your color' });
+      }
     }
     await NailColor.findByIdAndDelete(req.params.id);
     res.json({ message: 'Color deleted' });

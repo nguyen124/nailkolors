@@ -13,11 +13,28 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+async function generateSlug(salonName) {
+  const base = salonName.toLowerCase().trim()
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const existing = await SalonOwner.find({ slug: new RegExp('^' + base + '(-\\d+)?$') });
+  if (existing.length === 0) return base;
+  return `${base}-${existing.length + 1}`;
+}
+
 // GET all salon owners (admin only)
 router.get('/', auth, adminOnly, async (req, res) => {
   try {
     const owners = await SalonOwner.find().populate('userId', 'name email phone');
     res.json(owners);
+  } catch (err) { res.status(500).json({ message: err.message }); }
+});
+
+// GET by slug (public)
+router.get('/by-slug/:slug', async (req, res) => {
+  try {
+    const profile = await SalonOwner.findOne({ slug: req.params.slug }).populate('userId', 'name email phone');
+    if (!profile) return res.status(404).json({ message: 'Salon not found' });
+    res.json(profile);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
@@ -43,6 +60,7 @@ router.post('/', auth, adminOnly, upload.single('logo'), async (req, res) => {
     }
     const data = { userId: user._id, salonName, address: address || '', bio: bio || '', phone: phone || '' };
     if (req.file) data.logo = `/uploads/salon-owners/${req.file.filename}`;
+    data.slug = await generateSlug(salonName);
     const profile = new SalonOwner(data);
     await profile.save();
     res.status(201).json({ ...profile.toObject(), userId: { _id: user._id, name: user.name, email: user.email, phone: user.phone } });
@@ -69,7 +87,7 @@ router.delete('/:id', auth, adminOnly, async (req, res) => {
   try {
     const profile = await SalonOwner.findById(req.params.id);
     if (!profile) return res.status(404).json({ message: 'Not found' });
-    await NailColor.deleteMany({ ownerId: profile.userId });
+    await NailColor.deleteMany({ salonId: profile._id });
     await SalonOwner.findByIdAndDelete(req.params.id);
     await User.findByIdAndDelete(profile.userId);
     res.json({ message: 'Salon owner removed' });

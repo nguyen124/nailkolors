@@ -9,7 +9,7 @@ const nailColorSchema = new mongoose.Schema({
   dotImage: { type: String, default: '' },
   quantity: { type: Number, default: 0, min: 0 },
   status: { type: String, enum: ['available','out-of-stock'], default: 'available' },
-  ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null } // null = main salon
+  salonId: { type: mongoose.Schema.Types.ObjectId, ref: 'SalonOwner', default: null } // null = main salon
 }, { timestamps: true });
 
 nailColorSchema.pre('save', function(next) {

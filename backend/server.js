@@ -13,6 +13,7 @@ const appointmentRoutes = require('./routes/appointments');
 const postRoutes = require('./routes/posts');
 const analyticsRoutes = require('./routes/analytics');
 const salonOwnerRoutes = require('./routes/salon-owners');
+const mySalonRoutes = require('./routes/my-salon');
 
 const app = express();
 const server = http.createServer(app);
@@ -55,6 +56,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/salon-owners', salonOwnerRoutes);
+app.use('/api/my-salon', mySalonRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 

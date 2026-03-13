@@ -15,7 +15,8 @@ const technicianSchema = new mongoose.Schema({
   specialties: [{ type: String }],
   workingHours: [workingHoursSchema],
   blockedDates: [{ type: Date }],
-  isActive: { type: Boolean, default: true }
+  isActive: { type: Boolean, default: true },
+  salonId: { type: mongoose.Schema.Types.ObjectId, ref: 'SalonOwner', default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Technician', technicianSchema);

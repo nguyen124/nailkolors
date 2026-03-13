@@ -59,14 +59,19 @@ export const routes: Routes = [
       { path: 'availability', loadComponent: () => import('./pages/technician/availability/availability.component').then(m => m.TechnicianAvailabilityComponent) },
     ]
   },
+  { path: 'salon-owner', redirectTo: '/', pathMatch: 'full' },
   {
-    path: 'salon-owner',
+    path: 'salon-owner/:slug',
     loadComponent: () => import('./layout/salon-owner-layout/salon-owner-layout.component').then(m => m.SalonOwnerLayoutComponent),
     canActivate: [authGuard, salonOwnerGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./pages/salon-owner/dashboard/dashboard.component').then(m => m.SalonOwnerDashboardComponent) },
+      { path: 'services', loadComponent: () => import('./pages/salon-owner/services/services.component').then(m => m.SalonOwnerServicesComponent) },
       { path: 'colors', loadComponent: () => import('./pages/salon-owner/colors/colors.component').then(m => m.SalonOwnerColorsComponent) },
+      { path: 'technicians', loadComponent: () => import('./pages/salon-owner/technicians/technicians.component').then(m => m.SalonOwnerTechniciansComponent) },
+      { path: 'appointments', loadComponent: () => import('./pages/salon-owner/appointments/appointments.component').then(m => m.SalonOwnerAppointmentsComponent) },
+      { path: 'posts', loadComponent: () => import('./pages/salon-owner/posts/posts.component').then(m => m.SalonOwnerPostsComponent) },
     ]
   },
   { path: '**', redirectTo: '' }

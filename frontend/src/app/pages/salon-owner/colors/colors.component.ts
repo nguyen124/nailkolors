@@ -10,8 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ColorService } from '../../../services/color.service';
-import { NailColor } from '../../../models';
+import { MySalonService } from '../../../services/my-salon.service';
 
 const FINISH_TYPES = ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'];
 
@@ -110,7 +109,7 @@ const FINISH_TYPES = ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'];
           <tr mat-row *matRowDef="let row; columns: columns;"></tr>
         </table>
         <p class="empty" *ngIf="colors.length === 0 && !loading">No colors yet. Add your first color!</p>
-        <p class="empty" *ngIf="loading">Loading…</p>
+        <p class="empty" *ngIf="loading">Loading...</p>
       </mat-card>
     </div>
   `,
@@ -133,7 +132,7 @@ const FINISH_TYPES = ['Shiny', 'Matte', 'Glitter', 'Cat Eyes', 'Holographic'];
   `]
 })
 export class SalonOwnerColorsComponent implements OnInit {
-  colors: NailColor[] = [];
+  colors: any[] = [];
   form: FormGroup;
   showForm = false;
   editId = '';
@@ -143,7 +142,7 @@ export class SalonOwnerColorsComponent implements OnInit {
   columns = ['swatch', 'colorName', 'brand', 'finishType', 'quantity', 'status', 'actions'];
   finishTypes = FINISH_TYPES;
 
-  constructor(private colorService: ColorService, private fb: FormBuilder, private snackBar: MatSnackBar) {
+  constructor(private mySalonService: MySalonService, private fb: FormBuilder, private snackBar: MatSnackBar) {
     this.form = this.fb.group({
       colorName: ['', Validators.required],
       brand:     ['', Validators.required],
@@ -157,7 +156,7 @@ export class SalonOwnerColorsComponent implements OnInit {
 
   load() {
     this.loading = true;
-    this.colorService.getAll({ owner: 'me' }).subscribe({
+    this.mySalonService.getColors().subscribe({
       next: c => { this.colors = c; this.loading = false; },
       error: () => this.loading = false
     });
@@ -171,7 +170,7 @@ export class SalonOwnerColorsComponent implements OnInit {
     this.imageFile = null;
   }
 
-  edit(c: NailColor) {
+  edit(c: any) {
     this.showForm = true;
     this.editId = c._id;
     this.form.patchValue({ colorName: c.colorName, brand: c.brand, colorCode: c.colorCode, finishType: c.finishType, quantity: c.quantity });
@@ -195,7 +194,9 @@ export class SalonOwnerColorsComponent implements OnInit {
     const fd = new FormData();
     Object.entries(this.form.value).forEach(([k, v]) => fd.append(k, String(v)));
     if (this.imageFile) fd.append('image', this.imageFile);
-    const req = this.editId ? this.colorService.update(this.editId, fd) : this.colorService.create(fd);
+    const req = this.editId
+      ? this.mySalonService.updateColor(this.editId, fd)
+      : this.mySalonService.createColor(fd);
     req.subscribe({
       next: () => { this.snackBar.open('Saved!', 'OK', { duration: 2000 }); this.load(); this.cancelForm(); },
       error: e => this.snackBar.open(e.error?.message || 'Error', 'OK', { duration: 3000 })
@@ -204,6 +205,9 @@ export class SalonOwnerColorsComponent implements OnInit {
 
   delete(id: string) {
     if (!confirm('Delete this color?')) return;
-    this.colorService.delete(id).subscribe({ next: () => { this.snackBar.open('Deleted', 'OK', { duration: 2000 }); this.load(); } });
+    this.mySalonService.deleteColor(id).subscribe({
+      next: () => { this.snackBar.open('Deleted', 'OK', { duration: 2000 }); this.load(); },
+      error: e => this.snackBar.open(e.error?.message || 'Error', 'OK', { duration: 3000 })
+    });
   }
 }
