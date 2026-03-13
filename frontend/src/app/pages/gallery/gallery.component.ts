@@ -28,6 +28,18 @@ import { NailColor } from '../../models';
               <button class="chip" *ngFor="let b of brands" [class.active]="activeBrand===b" (click)="activeBrand=b;applyFilters()">{{b}}</button>
             </div>
           </div>
+          <!-- Color spectrum -->
+          <div class="filter-row">
+            <span class="filter-label">Color</span>
+            <div class="filter-chips">
+              <button class="spectrum-chip" [class.active]="activeSpectrum===''" (click)="activeSpectrum='';applyFilters()">All</button>
+              <button class="spectrum-chip" *ngFor="let s of spectrums"
+                [class.active]="activeSpectrum===s.key"
+                (click)="activeSpectrum=s.key;applyFilters()">
+                <span class="swatch-dot" [style.background]="s.gradient"></span>{{s.label}}
+              </button>
+            </div>
+          </div>
           <!-- Stock -->
           <div class="filter-row">
             <span class="filter-label">Stock</span>
@@ -91,6 +103,9 @@ import { NailColor } from '../../models';
     .color-info h4 { font-size: 0.9rem; margin-bottom: 2px; }
     .color-info p { font-size: 0.8rem; color: var(--text-muted); }
     .finish-tag { font-size: 0.7rem; background: var(--primary-light); color: var(--primary-dark); padding: 2px 8px; border-radius: 50px; text-transform: capitalize; }
+    .spectrum-chip { display: flex; align-items: center; gap: 6px; padding: 6px 16px; border: 2px solid var(--primary-light); border-radius: 50px; background: white; color: var(--primary); cursor: pointer; font-weight: 600; transition: all 0.2s; font-size: 0.88rem; }
+    .spectrum-chip:hover, .spectrum-chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+    .swatch-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; border: 1.5px solid rgba(0,0,0,0.15); }
     .empty { text-align: center; color: var(--text-muted); margin-top: 48px; }
     .pagination { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 40px; flex-wrap: wrap; }
     .page-btn { min-width: 36px; height: 36px; padding: 0 10px; border: 2px solid var(--primary-light); border-radius: 8px; background: white; color: var(--primary); cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
@@ -110,6 +125,53 @@ export class GalleryComponent implements OnInit {
   activeFilter = '';
   activeBrand = '';
   showAvailable = false;
+  activeSpectrum = '';
+
+  spectrums = [
+    { key: 'red',     label: 'Reds',     gradient: 'linear-gradient(135deg,#e53935,#ff6b6b)' },
+    { key: 'pink',    label: 'Pinks',    gradient: 'linear-gradient(135deg,#e91e8c,#ffb6c1)' },
+    { key: 'purple',  label: 'Purples',  gradient: 'linear-gradient(135deg,#7b1fa2,#ce93d8)' },
+    { key: 'blue',    label: 'Blues',    gradient: 'linear-gradient(135deg,#1565c0,#81d4fa)' },
+    { key: 'green',   label: 'Greens',   gradient: 'linear-gradient(135deg,#2e7d32,#a5d6a7)' },
+    { key: 'warm',    label: 'Warm',     gradient: 'linear-gradient(135deg,#e65100,#ffd54f)' },
+    { key: 'neutral', label: 'Neutrals', gradient: 'linear-gradient(135deg,#5d4037,#f5f0ee)' },
+  ];
+
+  private hexToHsl(hex: string): { h: number; s: number; l: number } | null {
+    const m = hex.replace('#', '').match(/^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+    if (!m) return null;
+    const r = parseInt(m[1], 16) / 255;
+    const g = parseInt(m[2], 16) / 255;
+    const b = parseInt(m[3], 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    if (max === min) return { h: 0, s: 0, l };
+    const d = max - min;
+    const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    let h = 0;
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+    return { h: h * 360, s, l };
+  }
+
+  private getSpectrum(colorCode: string): string {
+    const hsl = this.hexToHsl(colorCode);
+    if (!hsl) return 'neutral';
+    const { h, s, l } = hsl;
+    // Low saturation or extreme lightness/darkness → neutral
+    if (s < 0.18 || l < 0.12 || l > 0.92) return 'neutral';
+    // Warm browns/nudes (orange hue, low-medium saturation)
+    if (h >= 15 && h < 55 && s < 0.55) return 'neutral';
+    if (h < 15 || h >= 345) return 'red';
+    if (h >= 15 && h < 48) return 'warm';   // orange
+    if (h >= 48 && h < 80) return 'warm';   // yellow/gold
+    if (h >= 80 && h < 175) return 'green';
+    if (h >= 175 && h < 258) return 'blue';
+    if (h >= 258 && h < 300) return 'purple';
+    if (h >= 300 && h < 345) return 'pink';
+    return 'neutral';
+  }
 
   readonly pageSize = 40;
   currentPage = 1;
@@ -156,10 +218,11 @@ export class GalleryComponent implements OnInit {
 
   applyFilters() {
     this.filteredColors = this.colors.filter(c => {
-      const finishMatch = !this.activeFilter || c.finishType === this.activeFilter;
-      const brandMatch  = !this.activeBrand  || c.brand === this.activeBrand;
-      const statusMatch = !this.showAvailable || c.status === 'available';
-      return finishMatch && brandMatch && statusMatch;
+      const finishMatch   = !this.activeFilter   || c.finishType === this.activeFilter;
+      const brandMatch    = !this.activeBrand    || c.brand === this.activeBrand;
+      const statusMatch   = !this.showAvailable  || c.status === 'available';
+      const spectrumMatch = !this.activeSpectrum || this.getSpectrum(c.colorCode) === this.activeSpectrum;
+      return finishMatch && brandMatch && statusMatch && spectrumMatch;
     });
     this.currentPage = 1;
   }
