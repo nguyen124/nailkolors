@@ -99,7 +99,7 @@ import { AuthService } from '../../services/auth.service';
           <div class="footer-contact">
             <h4>Contact</h4>
             <p><mat-icon>location_on</mat-icon> 646 West FM 78, Cibolo, TX 78108</p>
-            <p><mat-icon>phone</mat-icon> (210) 530-1285</p>
+            <p><mat-icon>phone</mat-icon> (210) 530-1285 or (210) 609-8660</p>
             <p><mat-icon>email</mat-icon> thanhtktran88&#64;gmail.com</p>
           </div>
         </div>

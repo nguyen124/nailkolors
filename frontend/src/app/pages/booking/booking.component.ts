@@ -185,7 +185,7 @@ import { Service, Technician, NailColor } from '../../models';
               <mat-form-field class="full-width">
                 <mat-label>Phone Number</mat-label>
                 <mat-icon matPrefix>phone</mat-icon>
-                <input matInput formControlName="customerPhone" type="tel" placeholder="(555) 123-4567">
+                <input matInput formControlName="customerPhone" type="tel" placeholder="(210) 530-1285 or (210) 609-8660">
                 <mat-error *ngIf="infoForm.get('customerPhone')?.hasError('required')">Phone is required</mat-error>
               </mat-form-field>
 
