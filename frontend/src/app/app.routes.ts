@@ -44,6 +44,7 @@ export const routes: Routes = [
       { path: 'technicians', loadComponent: () => import('./pages/admin/technicians/technicians.component').then(m => m.AdminTechniciansComponent) },
       { path: 'appointments', loadComponent: () => import('./pages/admin/appointments/appointments.component').then(m => m.AdminAppointmentsComponent) },
       { path: 'posts', loadComponent: () => import('./pages/admin/posts/posts.component').then(m => m.AdminPostsComponent) },
+      { path: 'addons', loadComponent: () => import('./pages/admin/addons/addons.component').then(m => m.AdminAddOnsComponent) },
     ]
   },
   {

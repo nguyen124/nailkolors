@@ -12,6 +12,7 @@ const colorRoutes = require('./routes/colors');
 const appointmentRoutes = require('./routes/appointments');
 const postRoutes = require('./routes/posts');
 const analyticsRoutes = require('./routes/analytics');
+const addOnRoutes = require('./routes/addons');
 
 const app = express();
 const server = http.createServer(app);
@@ -53,6 +54,7 @@ app.use('/api/colors', colorRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/addons', addOnRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 

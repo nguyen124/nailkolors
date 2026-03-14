@@ -3,6 +3,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ServiceService } from '../../services/service.service';
+import { AddOnService, AddOn } from '../../services/addon.service';
 import { Service } from '../../models';
 
 @Component({
@@ -33,6 +34,32 @@ import { Service } from '../../models';
             </div>
           </div>
         </div>
+
+        <div class="pedicure-note" *ngIf="activeCategory === 'Pedicure'">
+          <mat-icon>info_outline</mat-icon>
+          <span><strong>All the pedicures come with default one solid regular color, all other add-on options like gel color, french tip and other design may come with extra cost — please see the add-ons menu section or ask us directly for more info.</strong></span>
+        </div>
+
+        <!-- Add-Ons Section -->
+        <div class="addons-section" *ngIf="visibleAddOns.length > 0">
+          <h2 class="addons-title">
+            <mat-icon>extension</mat-icon>
+            Add-Ons & Extras
+          </h2>
+          <p class="addons-subtitle">Enhance your service with these optional add-ons</p>
+          <div class="addons-grid">
+            <div class="addon-card" *ngFor="let a of visibleAddOns">
+              <div class="addon-info">
+                <span class="addon-name">{{a.name}}</span>
+                <span class="addon-desc" *ngIf="a.description">{{a.description}}</span>
+                <div class="addon-tags" *ngIf="a.applicableCategories.length > 0">
+                  <span class="addon-tag" *ngFor="let cat of a.applicableCategories">{{cat}}</span>
+                </div>
+              </div>
+              <span class="addon-price">+\${{a.price}}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   `,
@@ -51,18 +78,51 @@ import { Service } from '../../models';
     .price { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
     .duration { display: flex; align-items: center; gap: 4px; color: var(--text-muted); }
     .duration mat-icon { font-size: 16px; height: 16px; width: 16px; }
+    .pedicure-note { display: flex; align-items: flex-start; gap: 10px; background: #fff8f0; border-left: 4px solid var(--primary); border-radius: 6px; padding: 14px 18px; margin-bottom: 28px; color: #7a5c4e; font-size: 0.88rem; line-height: 1.6; }
+    .pedicure-note mat-icon { font-size: 20px; height: 20px; width: 20px; color: var(--primary); flex-shrink: 0; margin-top: 1px; }
     .book-btn { display: block; text-align: center; text-decoration: none; }
+    /* Add-Ons */
+    .addons-section { margin-top: 64px; padding-top: 48px; border-top: 2px solid #f0e8f0; }
+    .addons-title { display: flex; align-items: center; gap: 10px; font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary-dark); margin-bottom: 8px; }
+    .addons-title mat-icon { font-size: 32px; height: 32px; width: 32px; color: var(--primary); }
+    .addons-subtitle { color: var(--text-muted); margin-bottom: 32px; }
+    .addons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .addon-card { display: flex; justify-content: space-between; align-items: flex-start; background: white; border: 1px solid #f0e8f0; border-radius: 12px; padding: 16px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: box-shadow 0.2s; }
+    .addon-card:hover { box-shadow: 0 4px 16px rgba(180,120,180,0.12); }
+    .addon-info { display: flex; flex-direction: column; gap: 4px; }
+    .addon-name { font-weight: 700; font-size: 1rem; color: var(--text-dark); }
+    .addon-desc { font-size: 0.82rem; color: var(--text-muted); }
+    .addon-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+    .addon-tag { background: #f3e5f5; color: var(--primary-dark); border-radius: 4px; padding: 2px 7px; font-size: 0.72rem; font-weight: 600; }
+    .addon-price { font-size: 1.1rem; font-weight: 800; color: var(--primary); white-space: nowrap; margin-left: 16px; }
     @media (max-width: 900px) { .services-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .services-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .page-hero { padding: 48px 0; } .page-hero h1 { font-size: 2rem; } .services-grid { grid-template-columns: 1fr; } .addons-grid { grid-template-columns: 1fr; } }
     @media (max-width: 480px) { .page-hero h1 { font-size: 1.6rem; } }
   `]
 })
 export class ServicesComponent implements OnInit {
   services: Service[] = [];
   filteredServices: Service[] = [];
+  allAddOns: AddOn[] = [];
   categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
   activeCategory = '';
-  constructor(private serviceService: ServiceService) {}
-  ngOnInit() { this.serviceService.getAll().subscribe(s => { this.services = s; this.filteredServices = s; }); }
-  filter(cat: string) { this.activeCategory = cat; this.filteredServices = cat ? this.services.filter(s => s.category === cat) : this.services; }
+
+  constructor(private serviceService: ServiceService, private addOnService: AddOnService) {}
+
+  ngOnInit() {
+    this.serviceService.getAll().subscribe(s => { this.services = s; this.filteredServices = s; });
+    this.addOnService.getAll().subscribe(a => this.allAddOns = a);
+  }
+
+  get visibleAddOns(): AddOn[] {
+    if (!this.activeCategory) return this.allAddOns;
+    return this.allAddOns.filter(a =>
+      a.applicableCategories.length === 0 || a.applicableCategories.includes(this.activeCategory)
+    );
+  }
+
+  filter(cat: string) {
+    this.activeCategory = cat;
+    this.filteredServices = cat ? this.services.filter(s => s.category === cat) : this.services;
+  }
 }
