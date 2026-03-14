@@ -25,6 +25,7 @@ import { AuthService } from '../../services/auth.service';
           <a routerLink="/technicians" routerLinkActive="active">Team</a>
           <a routerLink="/blog" routerLinkActive="active">Blog</a>
           <a routerLink="/contact" routerLinkActive="active">Contact</a>
+          <a routerLink="/feedback" routerLinkActive="active">Feedback</a>
         </nav>
         <div class="header-actions">
           <ng-container *ngIf="auth.isLoggedIn(); else guestActions">
@@ -66,6 +67,7 @@ import { AuthService } from '../../services/auth.service';
       <a mat-menu-item routerLink="/technicians">Our Team</a>
       <a mat-menu-item routerLink="/blog">Blog</a>
       <a mat-menu-item routerLink="/contact">Contact</a>
+      <a mat-menu-item routerLink="/feedback">Feedback</a>
       <a mat-menu-item routerLink="/book">Book Appointment</a>
       <a mat-menu-item routerLink="/my-appointments">My Appointments</a>
       <ng-container *ngIf="auth.isLoggedIn()">

@@ -45,6 +45,9 @@ import { Subscription } from 'rxjs';
           <a mat-list-item routerLink="/admin/addons" routerLinkActive="active">
             <mat-icon matListItemIcon>extension</mat-icon><span matListItemTitle>Add-Ons</span>
           </a>
+          <a mat-list-item routerLink="/admin/feedback" routerLinkActive="active">
+            <mat-icon matListItemIcon>rate_review</mat-icon><span matListItemTitle>Feedback</span>
+          </a>
         </mat-nav-list>
         <div class="sidenav-footer">
           <a mat-list-item routerLink="/"><mat-icon matListItemIcon>public</mat-icon><span matListItemTitle>View Site</span></a>

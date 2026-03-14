@@ -19,6 +19,7 @@ export const routes: Routes = [
       { path: 'blog', loadComponent: () => import('./pages/blog/blog.component').then(m => m.BlogComponent) },
       { path: 'blog/:id', loadComponent: () => import('./pages/blog-detail/blog-detail.component').then(m => m.BlogDetailComponent) },
       { path: 'contact', loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent) },
+      { path: 'feedback', loadComponent: () => import('./pages/feedback/feedback.component').then(m => m.FeedbackComponent) },
     ]
   },
   { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) },
@@ -45,6 +46,7 @@ export const routes: Routes = [
       { path: 'appointments', loadComponent: () => import('./pages/admin/appointments/appointments.component').then(m => m.AdminAppointmentsComponent) },
       { path: 'posts', loadComponent: () => import('./pages/admin/posts/posts.component').then(m => m.AdminPostsComponent) },
       { path: 'addons', loadComponent: () => import('./pages/admin/addons/addons.component').then(m => m.AdminAddOnsComponent) },
+      { path: 'feedback', loadComponent: () => import('./pages/admin/feedback/feedback.component').then(m => m.AdminFeedbackComponent) },
     ]
   },
   {
