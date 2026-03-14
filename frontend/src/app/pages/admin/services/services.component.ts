@@ -37,6 +37,7 @@ import { Service } from '../../../models';
                 <mat-option *ngFor="let c of categories" [value]="c">{{c}}</mat-option>
               </mat-select>
             </mat-form-field>
+            <mat-form-field><mat-label>Sort Order</mat-label><input matInput formControlName="sortOrder" type="number"></mat-form-field>
             <mat-form-field class="span-2"><mat-label>Description</mat-label><textarea matInput formControlName="description" rows="3"></textarea></mat-form-field>
             <div class="span-2 file-upload">
               <label>Service Image</label>
@@ -68,6 +69,10 @@ import { Service } from '../../../models';
           <ng-container matColumnDef="duration">
             <th mat-header-cell *matHeaderCellDef>Duration</th>
             <td mat-cell *matCellDef="let s">{{s.duration}} min</td>
+          </ng-container>
+          <ng-container matColumnDef="sortOrder">
+            <th mat-header-cell *matHeaderCellDef>Order</th>
+            <td mat-cell *matCellDef="let s">{{s.sortOrder}}</td>
           </ng-container>
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
@@ -103,10 +108,10 @@ export class AdminServicesComponent implements OnInit {
   imageFile: File | null = null;
   imagePreview = '';
   categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
-  columns = ['name', 'category', 'price', 'duration', 'actions'];
+  columns = ['sortOrder', 'name', 'category', 'price', 'duration', 'actions'];
 
   constructor(private serviceService: ServiceService, private fb: FormBuilder, private snackBar: MatSnackBar) {
-    this.form = this.fb.group({ name: ['', Validators.required], price: [0, Validators.required], duration: [60, Validators.required], category: ['Manicure', Validators.required], description: [''] });
+    this.form = this.fb.group({ name: ['', Validators.required], price: [0, Validators.required], duration: [60, Validators.required], category: ['Manicure', Validators.required], description: [''], sortOrder: [9999] });
   }
 
   ngOnInit() { this.load(); }

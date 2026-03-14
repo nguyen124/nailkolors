@@ -35,6 +35,10 @@ import { Service } from '../../models';
           </div>
         </div>
 
+        <div class="pedicure-note" *ngIf="activeCategory === 'Acrylic'">
+          <mat-icon>info_outline</mat-icon>
+          <span><strong>All the Acrylic come with the default one solid gel color, one week warranty, short nails and square shape, all other add-on options like special shape, long extra nail tip may come with extra cost — please see the add-ons menu section or ask us directly for more info.</strong></span>
+        </div>
         <div class="pedicure-note" *ngIf="activeCategory === 'Manicure'">
           <mat-icon>info_outline</mat-icon>
           <span><strong>All the manicures come with the default one solid regular color, all other add-on options like gel color and design may come with extra cost. Please see the add-ons menu section or ask us directly for more info.</strong></span>
