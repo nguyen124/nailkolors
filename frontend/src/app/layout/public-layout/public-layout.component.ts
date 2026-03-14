@@ -100,7 +100,7 @@ import { AuthService } from '../../services/auth.service';
             <h4>Contact</h4>
             <p><mat-icon>location_on</mat-icon> 646 West FM 78, Cibolo, TX 78108</p>
             <p><mat-icon>phone</mat-icon> (210) 530-1285</p>
-            <p><mat-icon>email</mat-icon> hello&#64;serenitynailsspa.com</p>
+            <p><mat-icon>email</mat-icon> thanhtktran88&#64;gmail.com</p>
           </div>
         </div>
         <div class="footer-bottom">

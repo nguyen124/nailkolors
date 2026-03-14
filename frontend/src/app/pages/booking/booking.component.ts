@@ -99,8 +99,10 @@ import { Service, Technician, NailColor } from '../../models';
                 (click)="pickTechnician('auto', null)">
                 <div class="tech-avatar auto">🎲</div>
                 <div class="tech-info">
-                  <h4>Auto Assign</h4>
-                  <p>Let us pick the best available technician</p>
+                  <h4>Let Chloe pick for you</h4>
+                  <p>Chloe is our manager, she can remember thousands of customers. Her memory is out of this world.
+                  She remembers exactly what customers did and how they wannted their nails done before.
+                  Just tell Chloe want you want she will find the best technician that make you happy</p>
                 </div>
                 <mat-icon class="sel-check" *ngIf="selectedTechId === 'auto'">check_circle</mat-icon>
               </div>

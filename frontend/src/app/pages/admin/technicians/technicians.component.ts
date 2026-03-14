@@ -16,7 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TechnicianService } from '../../../services/technician.service';
 import { Technician, WorkingHours } from '../../../models';
 
-const SERVICE_CATEGORIES = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
+const SERVICE_CATEGORIES = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing', 'Advanced Nail Design'];
 
 // Matches salon opening hours: Mon–Sat 9:30am–7pm, Sun 11:30am–5pm
 const DEFAULT_WORKING_HOURS: WorkingHours[] = [

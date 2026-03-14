@@ -30,7 +30,7 @@ export interface Service {
   name: string;
   price: number;
   duration: number;
-  category: 'Manicure' | 'Pedicure' | 'Acrylic' | 'Builder Gel' | 'Sns Dipping' | 'Color Change' | 'Removal' | 'Waxing';
+  category: 'Manicure' | 'Pedicure' | 'Acrylic' | 'Builder Gel' | 'Sns Dipping' | 'Color Change' | 'Removal' | 'Waxing' | 'Kid Service';
   description: string;
   image: string;
   isActive: boolean;

@@ -47,6 +47,19 @@ import { Service } from '../../models';
           <mat-icon>info_outline</mat-icon>
           <span><strong>All the pedicures come with default one solid regular color, all other add-on options like gel color, french tip and other design may come with extra cost — please see the add-ons menu section or ask us directly for more info.</strong></span>
         </div>
+        <div class="pedicure-note" *ngIf="activeCategory === 'Builder Gel'">
+          <mat-icon>info_outline</mat-icon>
+          <span><strong>All the BUILDER GEL come with the default one solid gel color, one week warranty, short nails and square shape, all other add-on options like special shape, long extra nail tip may come with extra cost. Please see the add-ons menu section or ask us directly for more info.</strong></span>
+        </div>
+        <div class="pedicure-note" *ngIf="activeCategory === 'Sns Dipping'">
+          <mat-icon>info_outline</mat-icon>
+          <span><strong>All the SNS DIPPING come with the default one solid dipping color power, one week warranty, short nails and square shape, all other add-on options like special shape, long extra nail tip may come with extra cost - please see the add-ons menu section or ask us directly for more info.</strong></span>
+        </div>
+
+        <div class="pedicure-note" *ngIf="activeCategory === 'Kid Service'">
+          <mat-icon>info_outline</mat-icon>
+          <span><strong>For children who are 10 years old or under.</strong></span>
+        </div>
 
         <!-- Add-Ons Section -->
         <div class="addons-section" *ngIf="visibleAddOns.length > 0">
@@ -112,7 +125,7 @@ export class ServicesComponent implements OnInit {
   services: Service[] = [];
   filteredServices: Service[] = [];
   allAddOns: AddOn[] = [];
-  categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
+  categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing', 'Kid Service'];
   activeCategory = 'Acrylic';
 
   constructor(private serviceService: ServiceService, private addOnService: AddOnService) {}

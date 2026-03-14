@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
           <h2>Visit Us</h2>
           <div class="info-item"><mat-icon>location_on</mat-icon><div><h4>Address</h4><p>646 West FM 78, Ste 113<br>Cibolo, TX 78108</p></div></div>
           <div class="info-item"><mat-icon>phone</mat-icon><div><h4>Phone</h4><p>(555) 123-4567</p></div></div>
-          <div class="info-item"><mat-icon>email</mat-icon><div><h4>Email</h4><p>hello&#64;serenitynailsspa.com</p></div></div>
+          <div class="info-item"><mat-icon>email</mat-icon><div><h4>Email</h4><p>thanhtktran88&#64;gmail.com</p></div></div>
           <div class="info-item"><mat-icon>schedule</mat-icon><div><h4>Hours</h4><p>Mon–Sat: 9:30am–7pm<br>Sun: 11:30am–5pm</p></div></div>
         </div>
         <div class="contact-form card">

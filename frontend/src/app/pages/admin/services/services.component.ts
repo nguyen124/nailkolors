@@ -107,7 +107,7 @@ export class AdminServicesComponent implements OnInit {
   editId = '';
   imageFile: File | null = null;
   imagePreview = '';
-  categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
+  categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing', 'Kid Service'];
   columns = ['sortOrder', 'name', 'category', 'price', 'duration', 'actions'];
 
   constructor(private serviceService: ServiceService, private fb: FormBuilder, private snackBar: MatSnackBar) {
