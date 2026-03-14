@@ -109,12 +109,12 @@ export class ServicesComponent implements OnInit {
   filteredServices: Service[] = [];
   allAddOns: AddOn[] = [];
   categories = ['Manicure', 'Pedicure', 'Acrylic', 'Builder Gel', 'Sns Dipping', 'Color Change', 'Removal', 'Waxing'];
-  activeCategory = '';
+  activeCategory = 'Acrylic';
 
   constructor(private serviceService: ServiceService, private addOnService: AddOnService) {}
 
   ngOnInit() {
-    this.serviceService.getAll().subscribe(s => { this.services = s; this.filteredServices = s; });
+    this.serviceService.getAll().subscribe(s => { this.services = s; this.filteredServices = s.filter(sv => sv.category === 'Acrylic'); });
     this.addOnService.getAll().subscribe(a => this.allAddOns = a);
   }
 
