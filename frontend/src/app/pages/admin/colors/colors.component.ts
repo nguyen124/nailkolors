@@ -64,7 +64,16 @@ import { NailColor } from '../../../models';
                   <mat-icon>colorize</mat-icon> Click image to pick color
                 </span>
               </div>
-              <input type="file" accept="image/*" (change)="onFile($event)">
+              <div class="upload-buttons">
+                <label class="upload-btn">
+                  <mat-icon>photo_library</mat-icon> Choose File
+                  <input type="file" accept="image/*" (change)="onFile($event)" hidden>
+                </label>
+                <label class="upload-btn camera-btn">
+                  <mat-icon>photo_camera</mat-icon> Take Photo
+                  <input type="file" accept="image/*" capture="environment" (change)="onFile($event)" hidden>
+                </label>
+              </div>
               <div class="img-pick-wrap" *ngIf="imagePreview">
                 <img [src]="imagePreview" class="preview"
                   [class.pick-cursor]="canPickColor"
@@ -148,6 +157,12 @@ import { NailColor } from '../../../models';
 
     /* Image file upload + color picker */
     .file-upload { display: flex; flex-direction: column; gap: 8px; }
+    .upload-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+    .upload-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border: 2px solid var(--primary); border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: var(--primary); cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .upload-btn:hover { background: var(--primary); color: white; }
+    .upload-btn mat-icon { font-size: 18px; height: 18px; width: 18px; }
+    .camera-btn { border-color: #e91e8c; color: #e91e8c; }
+    .camera-btn:hover { background: #e91e8c; color: white; }
     .file-label-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     .file-label-row label { font-size: 0.85rem; color: rgba(0,0,0,0.6); font-weight: 500; }
     .pick-hint { display: flex; align-items: center; gap: 4px; font-size: 0.78rem; color: var(--primary); font-weight: 600; background: #e8f5e9; padding: 2px 8px; border-radius: 50px; }
