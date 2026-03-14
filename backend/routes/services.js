@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     const { category } = req.query;
     const filter = { isActive: true };
     if (category) filter.category = category;
-    const services = await Service.find(filter).sort({ category: 1, name: 1 });
+    const services = await Service.find(filter).sort({ category: 1, sortOrder: 1, name: 1 });
     res.json(services);
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
