@@ -1,15 +1,9 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const Post = require('../models/Post');
 const { auth, adminOnly } = require('../middleware/auth');
+const { uploadToGCS } = require('../middleware/upload');
 
 const router = express.Router();
-const storage = multer.diskStorage({
-  destination: 'uploads/posts/',
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
   try {
@@ -33,20 +27,20 @@ router.get('/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-router.post('/', auth, adminOnly, upload.single('image'), async (req, res) => {
+router.post('/', auth, adminOnly, ...uploadToGCS('posts'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.image = `/uploads/posts/${req.file.filename}`;
+    if (req.fileUrl) data.image = req.fileUrl;
     const post = new Post(data);
     await post.save();
     res.status(201).json(post);
   } catch (err) { res.status(400).json({ message: err.message }); }
 });
 
-router.put('/:id', auth, adminOnly, upload.single('image'), async (req, res) => {
+router.put('/:id', auth, adminOnly, ...uploadToGCS('posts'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.image = `/uploads/posts/${req.file.filename}`;
+    if (req.fileUrl) data.image = req.fileUrl;
     const post = await Post.findByIdAndUpdate(req.params.id, data, { new: true });
     res.json(post);
   } catch (err) { res.status(400).json({ message: err.message }); }

@@ -68,17 +68,19 @@ router.get('/me', auth, async (req, res) => {
 
 // Seed admin (run once)
 router.post('/seed-admin', async (req, res) => {
+  const ADMIN_EMAIL = 'thanhtktran88@gmail.com';
+  const ADMIN_PASSWORD = 'Tr@nTh1K1mTh@nh031088';
   try {
-    const existing = await User.findOne({ email: 'admin@nailkolors.com' });
+    const existing = await User.findOne({ role: 'admin' });
     if (existing) {
-      // Update password in case it changed
-      existing.password = 'admin1234';
+      existing.email = ADMIN_EMAIL;
+      existing.password = ADMIN_PASSWORD;
       await existing.save();
-      return res.json({ message: 'Admin password updated', email: 'admin@nailkolors.com', password: 'admin1234' });
+      return res.json({ message: 'Admin updated', email: ADMIN_EMAIL });
     }
-    const admin = new User({ name: 'Admin', email: 'admin@nailkolors.com', password: 'admin1234', role: 'admin' });
+    const admin = new User({ name: 'Admin', email: ADMIN_EMAIL, password: ADMIN_PASSWORD, role: 'admin' });
     await admin.save();
-    res.json({ message: 'Admin created', email: 'admin@nailkolors.com', password: 'admin1234' });
+    res.json({ message: 'Admin created', email: ADMIN_EMAIL });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -1,15 +1,9 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const NailColor = require('../models/NailColor');
 const { auth, adminOnly } = require('../middleware/auth');
+const { uploadToGCS } = require('../middleware/upload');
 
 const router = express.Router();
-const storage = multer.diskStorage({
-  destination: 'uploads/colors/',
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
   try {
@@ -22,10 +16,10 @@ router.get('/', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-router.post('/', auth, adminOnly, upload.single('image'), async (req, res) => {
+router.post('/', auth, adminOnly, ...uploadToGCS('colors'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.image = `/uploads/colors/${req.file.filename}`;
+    if (req.fileUrl) data.image = req.fileUrl;
     data.quantity = parseInt(data.quantity) || 0;
     const color = new NailColor(data);
     await color.save();
@@ -33,10 +27,10 @@ router.post('/', auth, adminOnly, upload.single('image'), async (req, res) => {
   } catch (err) { res.status(400).json({ message: err.message }); }
 });
 
-router.put('/:id', auth, adminOnly, upload.single('image'), async (req, res) => {
+router.put('/:id', auth, adminOnly, ...uploadToGCS('colors'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.image = `/uploads/colors/${req.file.filename}`;
+    if (req.fileUrl) data.image = req.fileUrl;
     if (data.quantity !== undefined) {
       data.quantity = parseInt(data.quantity);
       data.status = data.quantity > 0 ? 'available' : 'out-of-stock';

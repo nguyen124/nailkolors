@@ -128,3 +128,5 @@ GET    /api/analytics/dashboard (admin)
 - **Image uploads** — Multer for service, color, technician, post photos
 - **Double-booking prevention** — time slot conflict detection
 - **Analytics dashboard** — revenue, popular services, technician stats
+
+- local mongodb connection string: MONGODB_URI=mongodb://localhost:27017/nailkolors

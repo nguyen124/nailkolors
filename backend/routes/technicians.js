@@ -1,21 +1,14 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const Technician = require('../models/Technician');
 const User = require('../models/User');
 const { auth, adminOnly, technicianOrAdmin } = require('../middleware/auth');
+const { uploadToGCS } = require('../middleware/upload');
 
 const router = express.Router();
-const storage = multer.diskStorage({
-  destination: 'uploads/technicians/',
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
 
 router.get('/', async (req, res) => {
   try {
     const filter = { isActive: true };
-    // Filter by specialty: ?specialty=gel  (matches service category)
     const specialty = req.query.specialty || req.query.serviceCategory;
     if (specialty) filter.specialties = specialty;
     const technicians = await Technician.find(filter).populate('userId', 'name email');
@@ -39,7 +32,6 @@ router.get('/:id', async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// Matches salon opening hours: Mon–Sat 9:30am–7pm, Sun 11:30am–5pm
 const DEFAULT_WORKING_HOURS = [
   { day: 'Monday',    isWorking: true, start: '09:30', end: '19:00' },
   { day: 'Tuesday',   isWorking: true, start: '09:30', end: '19:00' },
@@ -50,7 +42,7 @@ const DEFAULT_WORKING_HOURS = [
   { day: 'Sunday',    isWorking: true, start: '11:30', end: '17:00' },
 ];
 
-router.post('/', auth, adminOnly, upload.single('photo'), async (req, res) => {
+router.post('/', auth, adminOnly, ...uploadToGCS('technicians'), async (req, res) => {
   try {
     const { name, email, password, bio, specialties, workingHours } = req.body;
     let user = await User.findOne({ email });
@@ -63,17 +55,17 @@ router.post('/', auth, adminOnly, upload.single('photo'), async (req, res) => {
       specialties: specialties ? JSON.parse(specialties) : [],
       workingHours: workingHours ? JSON.parse(workingHours) : DEFAULT_WORKING_HOURS,
     };
-    if (req.file) data.photo = `/uploads/technicians/${req.file.filename}`;
+    if (req.fileUrl) data.photo = req.fileUrl;
     const tech = new Technician(data);
     await tech.save();
     res.status(201).json(tech);
   } catch (err) { res.status(400).json({ message: err.message }); }
 });
 
-router.put('/:id', auth, technicianOrAdmin, upload.single('photo'), async (req, res) => {
+router.put('/:id', auth, technicianOrAdmin, ...uploadToGCS('technicians'), async (req, res) => {
   try {
     const data = { ...req.body };
-    if (req.file) data.photo = `/uploads/technicians/${req.file.filename}`;
+    if (req.fileUrl) data.photo = req.fileUrl;
     if (data.specialties && typeof data.specialties === 'string') data.specialties = JSON.parse(data.specialties);
     if (data.workingHours && typeof data.workingHours === 'string') data.workingHours = JSON.parse(data.workingHours);
     if (data.blockedDates && typeof data.blockedDates === 'string') data.blockedDates = JSON.parse(data.blockedDates);

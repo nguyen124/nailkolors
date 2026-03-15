@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const http = require('http');
+const path = require('path');
 const { Server } = require('socket.io');
 
 const authRoutes = require('./routes/auth');
@@ -17,17 +18,25 @@ const feedbackRoutes = require('./routes/feedback');
 
 const app = express();
 const server = http.createServer(app);
+
+// In production (Cloud Run), frontend is served from the same origin — no CORS needed.
+// In development, allow localhost:4200.
+const corsOrigin = process.env.CLIENT_URL || 'http://localhost:4200';
 const io = new Server(server, {
-  cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:4200',
-    methods: ['GET', 'POST']
-  }
+  cors: { origin: corsOrigin, methods: ['GET', 'POST'] }
 });
 
 // Middleware
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:4200' }));
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+// In production, redirect /uploads/* to GCS public bucket
+if (process.env.NODE_ENV === 'production') {
+  app.use('/uploads', (req, res) => {
+    res.redirect(301, `https://storage.googleapis.com/nailkolors-uploads${req.path}`);
+  });
+} else {
+  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+}
 
 // Socket.io
 io.on('connection', (socket) => {
@@ -59,6 +68,13 @@ app.use('/api/addons', addOnRoutes);
 app.use('/api/feedback', feedbackRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
+
+// Serve Angular frontend in production
+const publicDir = path.join(__dirname, 'public');
+app.use(express.static(publicDir));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicDir, 'index.html'));
+});
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/nailkolors')
